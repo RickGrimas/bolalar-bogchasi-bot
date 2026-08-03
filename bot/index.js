@@ -216,8 +216,9 @@ bot.on('text', async (ctx) => {
 });
 
 // Dual Bot Launch Mode (Webhook for Production, Polling for Development)
-const webhookUrl = process.env.WEBHOOK_URL;
-if (webhookUrl) {
+const rawWebhook = process.env.WEBHOOK_URL || '';
+const webhookUrl = rawWebhook.trim().replace(/[\r\n\t"'\s]+/g, '').replace(/\/+$/, '');
+if (webhookUrl && webhookUrl.length > 8) {
   const secretPath = `/api/telegram-webhook`;
   app.use(bot.webhookCallback(secretPath));
   bot.telegram.setWebhook(`${webhookUrl}${secretPath}`)

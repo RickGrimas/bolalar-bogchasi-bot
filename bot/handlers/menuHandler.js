@@ -11,11 +11,19 @@ const escapeHTML = (str = '') => String(str).replace(/&/g, '&amp;').replace(/</g
 
 export const getCleanWebAppUrl = () => {
   let rawUrl = process.env.WEBAPP_URL || 'https://bolalar-bogchasi-bot.onrender.com';
-  rawUrl = String(rawUrl).trim().replace(/[\r\n\t"']+/g, '').replace(/\/+$/, '');
+  rawUrl = String(rawUrl).trim().replace(/[\r\n\t"'\s]+/g, '').replace(/\/+$/, '');
+  
   if (!rawUrl.startsWith('http://') && !rawUrl.startsWith('https://')) {
     rawUrl = `https://${rawUrl}`;
   }
-  return rawUrl;
+
+  try {
+    const parsed = new URL(rawUrl);
+    return parsed.href.replace(/\/+$/, '');
+  } catch (e) {
+    console.error("❌ Invalid WEBAPP_URL in env, using default Render URL fallback:", rawUrl);
+    return 'https://bolalar-bogchasi-bot.onrender.com';
+  }
 };
 
 /**
@@ -39,7 +47,7 @@ export async function buildMainMenuKeyboard(telegramId) {
       keyboard.push([CONTACT_BTN, AI_BTN]);
     }
 
-    // Include Admin Panel button in reply keyboard
+    // Always include Admin Panel button in reply keyboard
     keyboard.push([ADMIN_BTN]);
 
     return Markup.keyboard(keyboard).resize();
@@ -62,6 +70,8 @@ export async function handleStart(ctx) {
     const firstName = escapeHTML(ctx.from.first_name || 'Foydalanuvchi');
     const miniAppUrl = getCleanWebAppUrl();
 
+    console.log(`[handleStart] Clean miniAppUrl: "${miniAppUrl}" for tgId: ${telegramId}`);
+
     const welcomeText = 
       `Assalomu alaykum, <b>${firstName}</b>!\n\n` +
       `"Porloq Kelajak" zamonaviy bolalar bog'chasining rasmiy botiga xush kelibsiz.\n\n` +
@@ -83,7 +93,7 @@ export async function handleStart(ctx) {
     const replyKeyboard = await buildMainMenuKeyboard(telegramId);
     await ctx.reply("👇 Quyidagi menyu orqali bot imkoniyatlaridan foydalanishingiz mumkin:", replyKeyboard);
   } catch (err) {
-    console.error("Error in handleStart:", err);
+    console.error("❌ Critical error in handleStart:", err);
     try {
       const fallbackKeyboard = Markup.keyboard([
         [ABOUT_BTN, APPLY_BTN],
@@ -92,7 +102,7 @@ export async function handleStart(ctx) {
       ]).resize();
       await ctx.reply("Assalomu alaykum! Xush kelibsiz. Botdan foydalanish uchun pastdagi menyuni tanlang:", fallbackKeyboard);
     } catch (e) {
-      console.error("Fallback error:", e);
+      console.error("❌ Fallback error in handleStart:", e);
     }
   }
 }
