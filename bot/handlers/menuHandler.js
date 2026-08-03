@@ -5,56 +5,68 @@ export const ABOUT_BTN = "Bog'cha haqida ma'lumot ℹ️";
 export const APPLY_BTN = "Ariza qoldirish 📝";
 export const CONTACT_BTN = "Biz bilan bog'lanish 📞";
 export const AI_BTN = "🤖 AI Assistent Yordami";
-export const ADMIN_BTN = "Admin panelga kirish ⚙️";
+export const ADMIN_BTN = "⚙️ Admin Panelga kirish";
 
 /**
- * Generate Main Menu Keyboard according to User Role & DB Menus
+ * Generate Main Reply Keyboard Menu (Text Buttons)
  */
 export async function buildMainMenuKeyboard(telegramId) {
-  const isAdmin = await isAdminTelegramId(telegramId);
-  const dynamicMenus = await getMainMenus();
+  try {
+    const dynamicMenus = await getMainMenus();
+    const keyboard = [];
 
-  const keyboard = [];
-  const miniAppUrl = process.env.WEBAPP_URL || 'https://bolalar-bogchasi-bot.onrender.com';
-
-  // Main Web App button
-  keyboard.push([
-    Markup.button.webApp("📱 Web Ilovani Ochish", miniAppUrl)
-  ]);
-
-  // Group active DB menus into 2 buttons per row
-  for (let i = 0; i < dynamicMenus.length; i += 2) {
-    const row = [dynamicMenus[i].title];
-    if (i + 1 < dynamicMenus.length) {
-      row.push(dynamicMenus[i + 1].title);
+    if (dynamicMenus && dynamicMenus.length > 0) {
+      for (let i = 0; i < dynamicMenus.length; i += 2) {
+        const row = [dynamicMenus[i].title];
+        if (i + 1 < dynamicMenus.length) {
+          row.push(dynamicMenus[i + 1].title);
+        }
+        keyboard.push(row);
+      }
+    } else {
+      keyboard.push([ABOUT_BTN, APPLY_BTN]);
+      keyboard.push([CONTACT_BTN, AI_BTN]);
     }
-    keyboard.push(row);
+
+    return Markup.keyboard(keyboard).resize();
+  } catch (err) {
+    console.error("Error building main menu keyboard:", err.message);
+    return Markup.keyboard([
+      [ABOUT_BTN, APPLY_BTN],
+      [CONTACT_BTN, AI_BTN]
+    ]).resize();
   }
-
-  // Admin Panel Web App button
-  keyboard.push([
-    Markup.button.webApp("⚙️ Admin Panelga kirish", `${miniAppUrl}/admin`)
-  ]);
-
-  return Markup.keyboard(keyboard).resize();
 }
-
 
 /**
  * Send Welcome / Main Menu
  */
 export async function handleStart(ctx) {
-  const telegramId = ctx.from.id;
-  const firstName = ctx.from.first_name || 'Foydalanuvchi';
+  try {
+    const telegramId = ctx.from.id;
+    const firstName = ctx.from.first_name || 'Foydalanuvchi';
+    const miniAppUrl = process.env.WEBAPP_URL || 'https://bolalar-bogchasi-bot.onrender.com';
 
-  const keyboard = await buildMainMenuKeyboard(telegramId);
+    const welcomeText = 
+      `Assalomu alaykum, *${firstName}*!\n\n` +
+      `"Porloq Kelajak" zamonaviy bolalar bog'chasining rasmiy botiga xush kelibsiz.\n\n` +
+      `📱 *Web Ilova* va ⚙️ *Admin Panel*ga kirish uchun quyidagi alohida tugmalardan foydalanishingiz mumkin:`;
 
-  const welcomeText = 
-    `Assalomu alaykum, ${firstName}!\n\n` +
-    `"Porloq Kelajak" zamonaviy bolalar bog'chasining rasmiy botiga xush kelibsiz.\n\n` +
-    `Quyidagi menyu orqali bog'chamiz haqida ma'lumot olishingiz, ariza qoldirishingiz yoki biz bilan bog'lanishingiz mumkin.`;
+    // Send Welcome with standalone Inline WebApp buttons
+    const inlineButtons = Markup.inlineKeyboard([
+      [Markup.button.webApp("📱 Web Ilovani Ochish", miniAppUrl)],
+      [Markup.button.webApp("⚙️ Admin Panelga Kirish", `${miniAppUrl}/admin`)]
+    ]);
 
-  await ctx.reply(welcomeText, keyboard);
+    await ctx.replyWithMarkdown(welcomeText, inlineButtons);
+
+    // Send Main Reply Keyboard for chat actions
+    const replyKeyboard = await buildMainMenuKeyboard(telegramId);
+    await ctx.reply("👇 Quyidagi menyu orqali bot imkoniyatlaridan foydalanishingiz mumkin:", replyKeyboard);
+  } catch (err) {
+    console.error("Error in handleStart:", err);
+    await ctx.reply("Assalomu alaykum! Xush kelibsiz. Botdan foydalanish uchun pastdagi menyuni tanlang.");
+  }
 }
 
 /**
@@ -80,12 +92,13 @@ export async function handleAbout(ctx) {
  * Handle "Biz bilan bog'lanish 📞"
  */
 export async function handleContact(ctx) {
+  const miniAppUrl = process.env.WEBAPP_URL || 'https://bolalar-bogchasi-bot.onrender.com';
   const text = 
     `📞 *Biz bilan bog'lanish*\n\n` +
     `Savollaringiz yoki takliflaringiz bo'lsa, bevosita botga matnli xabar yozishingiz mumkin. Adminlarimiz tez orada sizga javob berishadi.\n\n` +
     `📱 *Murojaat uchun:* +998 71 200-00-11\n` +
     `💬 *Telegram Admin:* @bogcha_admin_support\n` +
-    `🌐 *Veb-sayt:* https://bogcha-mini-app.vercel.app`;
+    `🌐 *Veb-sayt:* ${miniAppUrl}`;
 
   await ctx.replyWithMarkdown(text);
 }

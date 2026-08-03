@@ -92,9 +92,10 @@ const saveLocalBroadcasts = (list) => {
   } catch (err) {}
 };
 
-// -----------------------------------------------------------------
-// 1. TELEGRAM BOT HANDLERS
-// -----------------------------------------------------------------
+// Global Telegraf Error Handler
+bot.catch((err, ctx) => {
+  console.error(`❌ Telegraf error for ${ctx.updateType}:`, err.message || err);
+});
 
 bot.start((ctx) => {
   userAISessions.delete(ctx.from.id);
