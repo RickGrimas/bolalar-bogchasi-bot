@@ -835,6 +835,18 @@ app.post('/api/ai/kids-helper', async (req, res) => {
   }
 });
 
+// Serve static React frontend if built
+const frontendDist = path.join(path.resolve(), 'frontend', 'dist');
+if (fs.existsSync(frontendDist)) {
+  app.use(express.static(frontendDist));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) {
+      return next();
+    }
+    res.sendFile(path.join(frontendDist, 'index.html'));
+  });
+}
+
 // Global Express Error Handler Middleware
 app.use((err, req, res, next) => {
   console.error("❌ Express unhandled error:", err.stack || err.message);

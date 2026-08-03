@@ -7,6 +7,7 @@
   "scripts": {
     "test-rls": "node supabase/verify_rls.js",
     "bot": "node bot/index.js",
+    "build": "cd frontend && npm install && npm run build",
     "start": "node bot/index.js"
   },
   "dependencies": {
