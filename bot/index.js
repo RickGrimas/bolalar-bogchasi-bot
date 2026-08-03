@@ -8,7 +8,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 
-import { handleStart, handleAbout, handleContact, ABOUT_BTN, APPLY_BTN, CONTACT_BTN, AI_BTN, buildMainMenuKeyboard } from './handlers/menuHandler.js';
+import { handleStart, handleAbout, handleContact, ABOUT_BTN, APPLY_BTN, CONTACT_BTN, AI_BTN, ADMIN_BTN, buildMainMenuKeyboard } from './handlers/menuHandler.js';
 import { startApplicationFlow, processApplicationAnswer, userApplicationSessions } from './handlers/applicationHandler.js';
 import { handleDynamicMenuClick, handleInlineCallback } from './handlers/dynamicMenuHandler.js';
 import { handleIncomingSupportMessage, supabase } from './services/supabaseService.js';
@@ -105,10 +105,24 @@ bot.start((ctx) => {
 bot.command('admin', async (ctx) => {
   const miniAppUrl = process.env.WEBAPP_URL || 'https://bolalar-bogchasi-bot.onrender.com';
   await ctx.reply(
-    "⚙️ *Admin Panelga kirish*\n\n" +
+    "⚙️ <b>Admin Panelga kirish</b>\n\n" +
     "Admin panelni ochish uchun quyidagi tugmani bosing:",
     {
-      parse_mode: 'Markdown',
+      parse_mode: 'HTML',
+      ...Markup.inlineKeyboard([
+        [Markup.button.webApp("⚙️ Admin Panelni Ochish", `${miniAppUrl}/admin`)]
+      ])
+    }
+  );
+});
+
+bot.hears(ADMIN_BTN, async (ctx) => {
+  const miniAppUrl = process.env.WEBAPP_URL || 'https://bolalar-bogchasi-bot.onrender.com';
+  await ctx.reply(
+    "⚙️ <b>Admin Panelga kirish</b>\n\n" +
+    "Admin panelni ochish uchun quyidagi tugmani bosing:",
+    {
+      parse_mode: 'HTML',
       ...Markup.inlineKeyboard([
         [Markup.button.webApp("⚙️ Admin Panelni Ochish", `${miniAppUrl}/admin`)]
       ])
