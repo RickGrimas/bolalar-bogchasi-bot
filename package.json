@@ -1,0 +1,21 @@
+{
+  "name": "kindergarten-supabase-backend",
+  "version": "1.0.0",
+  "description": "Bolalar bog'chasi CRM & Telegram Bot Server",
+  "main": "bot/index.js",
+  "type": "module",
+  "scripts": {
+    "test-rls": "node supabase/verify_rls.js",
+    "bot": "node bot/index.js",
+    "start": "node bot/index.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.8",
+    "cors": "^2.8.6",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^8.6.1",
+    "helmet": "^8.3.0",
+    "telegraf": "^4.16.3"
+  }
+}
