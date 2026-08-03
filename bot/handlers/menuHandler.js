@@ -15,6 +15,12 @@ export async function buildMainMenuKeyboard(telegramId) {
   const dynamicMenus = await getMainMenus();
 
   const keyboard = [];
+  const miniAppUrl = process.env.WEBAPP_URL || 'https://bolalar-bogchasi-bot.onrender.com';
+
+  // Main Web App button
+  keyboard.push([
+    Markup.button.webApp("📱 Web Ilovani Ochish", miniAppUrl)
+  ]);
 
   // Group active DB menus into 2 buttons per row
   for (let i = 0; i < dynamicMenus.length; i += 2) {
@@ -25,13 +31,10 @@ export async function buildMainMenuKeyboard(telegramId) {
     keyboard.push(row);
   }
 
-  // Admin button if user is Admin
-  if (isAdmin) {
-    const miniAppUrl = process.env.WEBAPP_URL || 'https://bogcha-mini-app.vercel.app';
-    keyboard.push([
-      Markup.button.webApp(ADMIN_BTN, `${miniAppUrl}?admin=true`)
-    ]);
-  }
+  // Admin Panel Web App button
+  keyboard.push([
+    Markup.button.webApp("⚙️ Admin Panelga kirish", `${miniAppUrl}/admin`)
+  ]);
 
   return Markup.keyboard(keyboard).resize();
 }

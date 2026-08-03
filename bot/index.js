@@ -101,6 +101,20 @@ bot.start((ctx) => {
   return handleStart(ctx);
 });
 
+bot.command('admin', async (ctx) => {
+  const miniAppUrl = process.env.WEBAPP_URL || 'https://bolalar-bogchasi-bot.onrender.com';
+  await ctx.reply(
+    "⚙️ *Admin Panelga kirish*\n\n" +
+    "Admin panelni ochish uchun quyidagi tugmani bosing:",
+    {
+      parse_mode: 'Markdown',
+      ...Markup.inlineKeyboard([
+        [Markup.button.webApp("⚙️ Admin Panelni Ochish", `${miniAppUrl}/admin`)]
+      ])
+    }
+  );
+});
+
 bot.hears(ABOUT_BTN, (ctx) => {
   userAISessions.delete(ctx.from.id);
   return handleAbout(ctx);
