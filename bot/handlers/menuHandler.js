@@ -9,6 +9,15 @@ export const ADMIN_BTN = "⚙️ Admin Panelga kirish";
 
 const escapeHTML = (str = '') => String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+export const getCleanWebAppUrl = () => {
+  let rawUrl = process.env.WEBAPP_URL || 'https://bolalar-bogchasi-bot.onrender.com';
+  rawUrl = String(rawUrl).trim().replace(/[\r\n\t"']+/g, '').replace(/\/+$/, '');
+  if (!rawUrl.startsWith('http://') && !rawUrl.startsWith('https://')) {
+    rawUrl = `https://${rawUrl}`;
+  }
+  return rawUrl;
+};
+
 /**
  * Generate Main Reply Keyboard Menu (Text Buttons)
  */
@@ -30,7 +39,7 @@ export async function buildMainMenuKeyboard(telegramId) {
       keyboard.push([CONTACT_BTN, AI_BTN]);
     }
 
-    // Always include Admin Panel button in reply keyboard
+    // Include Admin Panel button in reply keyboard
     keyboard.push([ADMIN_BTN]);
 
     return Markup.keyboard(keyboard).resize();
@@ -51,7 +60,7 @@ export async function handleStart(ctx) {
   try {
     const telegramId = ctx.from.id;
     const firstName = escapeHTML(ctx.from.first_name || 'Foydalanuvchi');
-    const miniAppUrl = process.env.WEBAPP_URL || 'https://bolalar-bogchasi-bot.onrender.com';
+    const miniAppUrl = getCleanWebAppUrl();
 
     const welcomeText = 
       `Assalomu alaykum, <b>${firstName}</b>!\n\n` +
@@ -75,13 +84,16 @@ export async function handleStart(ctx) {
     await ctx.reply("👇 Quyidagi menyu orqali bot imkoniyatlaridan foydalanishingiz mumkin:", replyKeyboard);
   } catch (err) {
     console.error("Error in handleStart:", err);
-    // Robust fallback without formatting errors
-    const fallbackKeyboard = Markup.keyboard([
-      [ABOUT_BTN, APPLY_BTN],
-      [CONTACT_BTN, AI_BTN],
-      [ADMIN_BTN]
-    ]).resize();
-    await ctx.reply("Assalomu alaykum! Xush kelibsiz. Botdan foydalanish uchun pastdagi menyuni tanlang:", fallbackKeyboard);
+    try {
+      const fallbackKeyboard = Markup.keyboard([
+        [ABOUT_BTN, APPLY_BTN],
+        [CONTACT_BTN, AI_BTN],
+        [ADMIN_BTN]
+      ]).resize();
+      await ctx.reply("Assalomu alaykum! Xush kelibsiz. Botdan foydalanish uchun pastdagi menyuni tanlang:", fallbackKeyboard);
+    } catch (e) {
+      console.error("Fallback error:", e);
+    }
   }
 }
 
@@ -108,7 +120,7 @@ export async function handleAbout(ctx) {
  * Handle "Biz bilan bog'lanish 📞"
  */
 export async function handleContact(ctx) {
-  const miniAppUrl = process.env.WEBAPP_URL || 'https://bolalar-bogchasi-bot.onrender.com';
+  const miniAppUrl = getCleanWebAppUrl();
   const text = 
     `📞 <b>Biz bilan bog'lanish</b>\n\n` +
     `Savollaringiz yoki takliflaringiz bo'lsa, bevosita botga matnli xabar yozishingiz mumkin. Adminlarimiz tez orada sizga javob berishadi.\n\n` +
