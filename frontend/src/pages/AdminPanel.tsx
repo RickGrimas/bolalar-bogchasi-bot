@@ -875,89 +875,25 @@ export const AdminPanel: React.FC = () => {
           isDark ? "bg-slate-950 text-slate-100" : "bg-slate-50 text-slate-900"
         }`}>
 
-          {/* MOBILE TOUCH NAVIGATION BAR (Visible only on mobile devices md:hidden) */}
-          <div className={`flex md:hidden overflow-x-auto scrollbar-none p-2 border-b gap-2 flex-shrink-0 z-20 transition-colors duration-300 ${
-            isDark ? "bg-slate-950/95 border-slate-800/80 text-slate-100" : "bg-white/95 border-slate-200 text-slate-900"
-          }`}>
-            {mode === "CMS" ? (
-              <>
-                {[
-                  { id: "home", label: t("admin.cms.home"), icon: "home" },
-                  { id: "life", label: t("admin.cms.life"), icon: "sports_esports" },
-                  { id: "about", label: t("admin.cms.about"), icon: "diversity_3" },
-                  { id: "ai", label: t("admin.cms.ai"), icon: "neurology" },
-                  { id: "bot_settings", label: "🤖 Bot Sozlamalari", icon: "settings_suggest" },
-                  { id: "apply", label: "CRM ni Boshqarish", icon: "assignment" },
-                  { id: "admins", label: "Adminlar & Vakolatlar", icon: "admin_panel_settings" },
-                  { id: "help", label: t("admin.cms.help"), icon: "help" },
-                ].map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveCmsTab(tab.id)}
-                    className={`flex-shrink-0 py-2 px-3.5 rounded-xl font-bold text-xs flex items-center gap-2 whitespace-nowrap transition-all ${
-                      activeCmsTab === tab.id 
-                        ? "bg-cyan-500 text-white shadow-md shadow-cyan-500/20 font-extrabold" 
-                        : isDark 
-                          ? "bg-slate-900 text-slate-400 border border-slate-800/80" 
-                          : "bg-slate-100 text-slate-600 border border-slate-200"
-                    }`}
-                  >
-                    <span className="material-symbols-outlined text-base">{tab.icon}</span>
-                    <span>{tab.label}</span>
-                  </button>
-                ))}
-              </>
-            ) : (
-              <>
-                {[
-                  { id: "children", label: t("admin.crm.children"), icon: "boy" },
-                  { id: "leads", label: "🤖 AI Leadlar", icon: "contacts" },
-                  { id: "groups", label: t("admin.crm.groups"), icon: "group_work" },
-                  { id: "messages", label: t("admin.crm.messages"), icon: "campaign" },
-                  { id: "dashboard", label: t("admin.crm.dashboard"), icon: "dashboard" },
-                  { id: "timeline", label: t("admin.crm.timeline"), icon: "history" },
-                  { id: "cameras", label: t("admin.crm.cameras"), icon: "videocam" },
-                  { id: "tasks", label: t("admin.crm.tasks"), icon: "task" },
-                  { id: "profile", label: t("admin.crm.profile"), icon: "person" },
-                ].map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveCrmTab(tab.id)}
-                    className={`flex-shrink-0 py-2 px-3.5 rounded-xl font-bold text-xs flex items-center gap-2 whitespace-nowrap transition-all ${
-                      activeCrmTab === tab.id 
-                        ? "bg-indigo-500 text-white shadow-md shadow-indigo-500/20 font-extrabold" 
-                        : isDark 
-                          ? "bg-slate-900 text-slate-400 border border-slate-800/80" 
-                          : "bg-slate-100 text-slate-600 border border-slate-200"
-                    }`}
-                  >
-                    <span className="material-symbols-outlined text-base">{tab.icon}</span>
-                    <span>{tab.label}</span>
-                  </button>
-                ))}
-              </>
-            )}
-          </div>
-          
-          {/* STATIC UNMOVING WORKSPACE CONTROL HEADER BAR */}
-          <div className={`p-4 md:px-8 md:py-5 border-b flex-shrink-0 flex items-center justify-between z-20 backdrop-blur-md transition-colors ${
+          {/* STATIC UNMOVING WORKSPACE CONTROL HEADER BAR (Scaled for Mobile) */}
+          <div className={`p-2.5 sm:p-4 md:px-8 md:py-5 border-b flex-shrink-0 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 z-20 backdrop-blur-md transition-colors ${
             isDark ? "border-slate-800/80 bg-slate-950/95" : "border-slate-200 bg-white/95"
           }`}>
-            <div className="text-left flex flex-col gap-1">
-              <div className="flex items-center gap-2.5">
-                <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-extrabold tracking-wider text-white ${
+            <div className="text-left flex flex-col gap-0.5 sm:gap-1">
+              <div className="flex items-center gap-2">
+                <span className={`px-2 py-0.5 rounded-full text-[9px] font-extrabold tracking-wider text-white ${
                   mode === "CMS" ? "bg-cyan-500" : "bg-indigo-500"
                 }`}>
                   {mode}
                 </span>
-                <h1 className={`font-bold text-lg md:text-xl ${isDark ? "text-white" : "text-slate-900"}`}>
+                <h1 className={`font-bold text-xs sm:text-sm md:text-xl ${isDark ? "text-white" : "text-slate-900"}`}>
                   {mode === "CMS" 
                     ? `${activeCmsTab.toUpperCase()} - CMS Web Ilova Sahifasini Tahrirlash`
                     : `${activeCrmTab.toUpperCase()} - CRM Bog'cha Tizimi Boshqaruvi`
                   }
                 </h1>
               </div>
-              <p className={`text-xs ${isDark ? "text-slate-400" : "text-slate-600"}`}>
+              <p className={`text-[10px] sm:text-xs ${isDark ? "text-slate-400" : "text-slate-600"}`}>
                 {mode === "CMS" 
                   ? "Asosiy web sahifadagi matnlar, rasmlar va funksiyalarni tahrirlash paneli."
                   : "Bog'cha bolalari, ota-onalar, guruhlar hamda ichki tizim ma'lumotlari."
@@ -967,17 +903,17 @@ export const AdminPanel: React.FC = () => {
 
             <button 
               onClick={() => toast.success("Barcha o'zgarishlar muvaffaqiyatli saqlandi!")}
-              className={`font-bold text-xs py-2.5 px-6 rounded-2xl shadow-lg border-b-4 active:scale-95 transition-all flex items-center gap-2 text-white ${
+              className={`font-bold text-[11px] sm:text-xs py-1.5 px-3 sm:py-2.5 sm:px-6 rounded-xl sm:rounded-2xl shadow-lg border-b-2 sm:border-b-4 active:scale-95 transition-all flex items-center gap-1 sm:gap-2 text-white flex-shrink-0 ${
                 mode === "CMS" ? "bg-cyan-500 hover:bg-cyan-400 border-cyan-700 shadow-cyan-500/20" : "bg-indigo-500 hover:bg-indigo-400 border-indigo-700 shadow-indigo-500/20"
               }`}
             >
-              <span className="material-symbols-outlined text-base">save</span>
+              <span className="material-symbols-outlined text-sm sm:text-base">save</span>
               Ma'lumotlarni Saqlash
             </button>
           </div>
 
-          {/* INDEPENDENTLY SCROLLABLE WORKSPACE CONTENT AREA */}
-          <div className="w-full flex-1 overflow-y-auto p-6 md:p-8 flex flex-col gap-6">
+          {/* INDEPENDENTLY SCROLLABLE WORKSPACE CONTENT AREA (With bottom nav clearance pb-20) */}
+          <div className="w-full flex-1 overflow-y-auto p-3 sm:p-6 md:p-8 pb-20 md:pb-8 flex flex-col gap-4 sm:gap-6">
             
             {/* MODE 1: CMS CONTENT PAGES */}
             {mode === "CMS" && (
@@ -3039,6 +2975,70 @@ export const AdminPanel: React.FC = () => {
             )}
           </div>
         </main>
+      </div>
+
+      {/* FIXED MOBILE BOTTOM NAVIGATION DOCK (Positioned at bottom of screen on mobile devices md:hidden) */}
+      <div className={`fixed bottom-0 left-0 right-0 z-40 flex md:hidden overflow-x-auto scrollbar-none p-1.5 border-t shadow-2xl backdrop-blur-xl gap-1 justify-around transition-colors duration-300 ${
+        isDark ? "bg-slate-950/95 border-slate-800/90 text-slate-100" : "bg-white/95 border-slate-200 text-slate-900 shadow-2xl"
+      }`}>
+        {mode === "CMS" ? (
+          <>
+            {[
+              { id: "home", label: t("admin.cms.home"), icon: "home" },
+              { id: "life", label: t("admin.cms.life"), icon: "sports_esports" },
+              { id: "about", label: t("admin.cms.about"), icon: "diversity_3" },
+              { id: "ai", label: t("admin.cms.ai"), icon: "neurology" },
+              { id: "bot_settings", label: "Bot", icon: "settings_suggest" },
+              { id: "apply", label: "CRM", icon: "assignment" },
+              { id: "admins", label: "Adminlar", icon: "admin_panel_settings" },
+              { id: "help", label: t("admin.cms.help"), icon: "help" },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveCmsTab(tab.id)}
+                className={`flex-1 min-w-[54px] py-1.5 px-1 rounded-xl font-bold text-[9px] sm:text-[10px] flex flex-col items-center justify-center gap-0.5 whitespace-nowrap transition-all ${
+                  activeCmsTab === tab.id 
+                    ? "bg-cyan-500 text-white shadow-md shadow-cyan-500/20 font-extrabold" 
+                    : isDark 
+                      ? "text-slate-400 hover:text-white" 
+                      : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                <span className="material-symbols-outlined text-base sm:text-lg">{tab.icon}</span>
+                <span className="truncate max-w-[64px]">{tab.label}</span>
+              </button>
+            ))}
+          </>
+        ) : (
+          <>
+            {[
+              { id: "children", label: t("admin.crm.children"), icon: "boy" },
+              { id: "leads", label: "AI Lead", icon: "contacts" },
+              { id: "groups", label: t("admin.crm.groups"), icon: "group_work" },
+              { id: "messages", label: t("admin.crm.messages"), icon: "campaign" },
+              { id: "dashboard", label: t("admin.crm.dashboard"), icon: "dashboard" },
+              { id: "timeline", label: t("admin.crm.timeline"), icon: "history" },
+              { id: "cameras", label: t("admin.crm.cameras"), icon: "videocam" },
+              { id: "tasks", label: t("admin.crm.tasks"), icon: "task" },
+              { id: "profile", label: t("admin.crm.profile"), icon: "person" },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveCrmTab(tab.id)}
+                className={`flex-1 min-w-[54px] py-1.5 px-1 rounded-xl font-bold text-[9px] sm:text-[10px] flex flex-col items-center justify-center gap-0.5 whitespace-nowrap transition-all ${
+                  activeCrmTab === tab.id 
+                    ? "bg-indigo-500 text-white shadow-md shadow-indigo-500/20 font-extrabold" 
+                    : isDark 
+                      ? "text-slate-400 hover:text-white" 
+                      : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                <span className="material-symbols-outlined text-base sm:text-lg">{tab.icon}</span>
+                <span className="truncate max-w-[64px]">{tab.label}</span>
+              </button>
+            ))}
+          </>
+        )}
       </div>
     </div>
   );
