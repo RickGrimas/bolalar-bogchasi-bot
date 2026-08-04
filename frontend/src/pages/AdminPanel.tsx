@@ -652,19 +652,19 @@ export const AdminPanel: React.FC = () => {
   return (
     <div className={`w-full h-screen overflow-hidden flex flex-col font-quicksand transition-colors duration-500 ${isDark ? "bg-slate-950 text-slate-100" : "bg-slate-100 text-slate-900"}`}>
       
-      {/* TOP HEADER BAR WITH LOGO, MODE BADGE & SETTINGS GEAR POPOVER ⚙️ */}
-      <header className={`h-16 w-full flex-shrink-0 flex items-center justify-between px-6 z-30 border-b backdrop-blur-md transition-colors ${
+      {/* TOP HEADER BAR WITH LOGO, MODE BADGE & SETTINGS GEAR POPOVER ⚙️ (Ultra-compact on Mobile) */}
+      <header className={`h-13 sm:h-16 w-full flex-shrink-0 flex items-center justify-between px-2.5 sm:px-6 z-30 border-b backdrop-blur-md transition-colors ${
         isDark ? "bg-slate-950/90 border-slate-800 text-white" : "bg-white/90 border-slate-200 text-slate-900 shadow-sm"
       }`}>
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-bold shadow-md">
-            <span className="material-symbols-outlined text-2xl font-bold">child_care</span>
+        <div className="flex items-center gap-1.5 sm:gap-3">
+          <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-bold shadow-md flex-shrink-0">
+            <span className="material-symbols-outlined text-lg sm:text-2xl font-bold">child_care</span>
           </div>
           <div className="flex flex-col text-left">
-            <span className="font-bold text-base bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">CloudCare Admin</span>
-            <span className={`text-[10px] font-bold ${isDark ? "text-slate-400" : "text-slate-500"}`}>Boshqaruv Tizimi</span>
+            <span className="font-bold text-xs sm:text-base bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent truncate max-w-[110px] sm:max-w-none">CloudCare Admin</span>
+            <span className={`text-[8px] sm:text-[10px] font-bold ${isDark ? "text-slate-400" : "text-slate-500"}`}>Boshqaruv Tizimi</span>
           </div>
-          <span className={`ml-2 px-3 py-1 rounded-full text-[10px] font-extrabold tracking-wider text-white shadow-sm ${
+          <span className={`ml-0.5 sm:ml-2 px-1.5 sm:px-3 py-0.5 rounded-full text-[8px] sm:text-[10px] font-extrabold tracking-wider text-white shadow-sm flex-shrink-0 ${
             mode === "CMS" ? "bg-cyan-500" : "bg-indigo-500"
           }`}>
             {mode === "CMS" ? "🌐 CMS SAYT" : "🔒 CRM TIZIMI"}
@@ -672,30 +672,30 @@ export const AdminPanel: React.FC = () => {
         </div>
 
         {/* Top Right Controls (Settings Gear ⚙️ & Mobile Hamburger ☰) */}
-        <div className="flex items-center gap-2 sm:gap-3 relative">
+        <div className="flex items-center gap-1 sm:gap-3 relative flex-shrink-0">
           {/* Mobile Hamburger ☰ Drawer Trigger */}
           <button
             onClick={() => setIsMobileDrawerOpen((prev) => !prev)}
-            className={`p-2.5 rounded-2xl border transition-all flex md:hidden items-center justify-center shadow-sm ${
+            className={`p-1.5 sm:p-2.5 rounded-xl sm:rounded-2xl border transition-all flex md:hidden items-center justify-center shadow-sm ${
               isMobileDrawerOpen 
                 ? "border-cyan-500 bg-cyan-500/10 text-cyan-400 ring-2 ring-cyan-500/30" 
                 : isDark ? "border-slate-800 text-slate-300 hover:bg-slate-900" : "border-slate-200 text-slate-700 hover:bg-slate-100"
             }`}
             title="Barcha Menyular (☰)"
           >
-            <span className="material-symbols-outlined text-xl">menu</span>
+            <span className="material-symbols-outlined text-lg sm:text-xl">menu</span>
           </button>
 
           <button
             onClick={() => setShowSettingsModal((prev) => !prev)}
-            className={`p-2.5 rounded-2xl border transition-all flex items-center justify-center shadow-sm ${
+            className={`p-1.5 sm:p-2.5 rounded-xl sm:rounded-2xl border transition-all flex items-center justify-center shadow-sm ${
               showSettingsModal 
                 ? "border-cyan-500 bg-cyan-500/10 text-cyan-400 ring-2 ring-cyan-500/30" 
                 : isDark ? "border-slate-800 text-slate-300 hover:bg-slate-900" : "border-slate-200 text-slate-700 hover:bg-slate-100"
             }`}
             title="Tizim Sozlamalari"
           >
-            <span className="material-symbols-outlined text-xl">settings</span>
+            <span className="material-symbols-outlined text-lg sm:text-xl">settings</span>
           </button>
 
           {/* SETTINGS POPOVER DROPDOWN MENU */}
@@ -889,25 +889,25 @@ export const AdminPanel: React.FC = () => {
           isDark ? "bg-slate-950 text-slate-100" : "bg-slate-50 text-slate-900"
         }`}>
 
-          {/* STATIC UNMOVING WORKSPACE CONTROL HEADER BAR (Scaled for Mobile) */}
-          <div className={`p-2.5 sm:p-4 md:px-8 md:py-5 border-b flex-shrink-0 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 z-20 backdrop-blur-md transition-colors ${
+          {/* STATIC UNMOVING WORKSPACE CONTROL HEADER BAR (Ultra-compact on Mobile) */}
+          <div className={`p-2 sm:p-4 md:px-8 md:py-4 border-b flex-shrink-0 flex items-center justify-between gap-2 z-20 backdrop-blur-md transition-colors ${
             isDark ? "border-slate-800/80 bg-slate-950/95" : "border-slate-200 bg-white/95"
           }`}>
-            <div className="text-left flex flex-col gap-0.5 sm:gap-1">
-              <div className="flex items-center gap-2">
-                <span className={`px-2 py-0.5 rounded-full text-[9px] font-extrabold tracking-wider text-white ${
+            <div className="text-left flex flex-col gap-0.5 sm:gap-1 min-w-0 flex-1">
+              <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                <span className={`px-1.5 py-0.5 rounded-full text-[8px] sm:text-[9px] font-extrabold tracking-wider text-white flex-shrink-0 ${
                   mode === "CMS" ? "bg-cyan-500" : "bg-indigo-500"
                 }`}>
                   {mode}
                 </span>
-                <h1 className={`font-bold text-xs sm:text-sm md:text-xl ${isDark ? "text-white" : "text-slate-900"}`}>
+                <h1 className={`font-bold text-xs sm:text-sm md:text-xl truncate ${isDark ? "text-white" : "text-slate-900"}`}>
                   {mode === "CMS" 
                     ? `${activeCmsTab.toUpperCase()} - CMS Web Ilova Sahifasini Tahrirlash`
                     : `${activeCrmTab.toUpperCase()} - CRM Bog'cha Tizimi Boshqaruvi`
                   }
                 </h1>
               </div>
-              <p className={`text-[10px] sm:text-xs ${isDark ? "text-slate-400" : "text-slate-600"}`}>
+              <p className={`hidden sm:block text-xs ${isDark ? "text-slate-400" : "text-slate-600"}`}>
                 {mode === "CMS" 
                   ? "Asosiy web sahifadagi matnlar, rasmlar va funksiyalarni tahrirlash paneli."
                   : "Bog'cha bolalari, ota-onalar, guruhlar hamda ichki tizim ma'lumotlari."
@@ -917,12 +917,12 @@ export const AdminPanel: React.FC = () => {
 
             <button 
               onClick={() => toast.success("Barcha o'zgarishlar muvaffaqiyatli saqlandi!")}
-              className={`font-bold text-[11px] sm:text-xs py-1.5 px-3 sm:py-2.5 sm:px-6 rounded-xl sm:rounded-2xl shadow-lg border-b-2 sm:border-b-4 active:scale-95 transition-all flex items-center gap-1 sm:gap-2 text-white flex-shrink-0 ${
+              className={`font-bold text-[10px] sm:text-xs py-1 px-2.5 sm:py-2.5 sm:px-6 rounded-lg sm:rounded-2xl shadow-lg border-b sm:border-b-4 active:scale-95 transition-all flex items-center gap-1 sm:gap-2 text-white flex-shrink-0 ${
                 mode === "CMS" ? "bg-cyan-500 hover:bg-cyan-400 border-cyan-700 shadow-cyan-500/20" : "bg-indigo-500 hover:bg-indigo-400 border-indigo-700 shadow-indigo-500/20"
               }`}
             >
-              <span className="material-symbols-outlined text-sm sm:text-base">save</span>
-              Ma'lumotlarni Saqlash
+              <span className="material-symbols-outlined text-xs sm:text-base">save</span>
+              <span className="hidden sm:inline">Ma'lumotlarni </span>Saqlash
             </button>
           </div>
 
@@ -2991,7 +2991,7 @@ export const AdminPanel: React.FC = () => {
         </main>
       </div>
 
-      {/* 5-SLOT MOBILE BOTTOM NAVIGATION DOCK (Strict 5 Columns: 4 Main Tabs + 1 Hamburger Menu Trigger) */}
+      {/* 5-SLOT MOBILE BOTTOM NAVIGATION DOCK (Strict 5 Columns with 5 REAL Pages) */}
       <div className={`fixed bottom-0 left-0 right-0 z-40 grid grid-cols-5 md:hidden p-1.5 border-t shadow-2xl backdrop-blur-xl transition-colors duration-300 ${
         isDark ? "bg-slate-950/95 border-slate-800/90 text-slate-100" : "bg-white/95 border-slate-200 text-slate-900 shadow-2xl"
       }`}>
@@ -3002,6 +3002,7 @@ export const AdminPanel: React.FC = () => {
               { id: "life", label: t("admin.cms.life"), icon: "sports_esports" },
               { id: "about", label: t("admin.cms.about"), icon: "diversity_3" },
               { id: "ai", label: t("admin.cms.ai"), icon: "neurology" },
+              { id: "bot_settings", label: "Bot", icon: "settings_suggest" },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -3024,25 +3025,6 @@ export const AdminPanel: React.FC = () => {
                 <span className="text-[9px] font-bold tracking-tight text-center leading-tight truncate w-full">{tab.label}</span>
               </button>
             ))}
-
-            {/* 5th Slot: ☰ Hamburger Button Trigger */}
-            <button
-              onClick={() => setIsMobileDrawerOpen(true)}
-              className={`flex flex-col items-center justify-center gap-0.5 py-1 px-0.5 rounded-xl transition-all ${
-                isMobileDrawerOpen
-                  ? "text-cyan-400 font-extrabold"
-                  : isDark ? "text-slate-400 hover:text-white" : "text-slate-500 hover:text-slate-900"
-              }`}
-            >
-              <div className={`p-1 px-2.5 rounded-xl flex items-center justify-center transition-all ${
-                isMobileDrawerOpen
-                  ? "bg-cyan-500 text-white shadow-md shadow-cyan-500/30"
-                  : "bg-slate-800/20"
-              }`}>
-                <span className="material-symbols-outlined text-lg">menu</span>
-              </div>
-              <span className="text-[9px] font-bold tracking-tight text-center leading-tight truncate w-full">Barchasi</span>
-            </button>
           </>
         ) : (
           <>
@@ -3051,6 +3033,7 @@ export const AdminPanel: React.FC = () => {
               { id: "leads", label: "AI Lead", icon: "contacts" },
               { id: "groups", label: t("admin.crm.groups"), icon: "group_work" },
               { id: "messages", label: t("admin.crm.messages"), icon: "campaign" },
+              { id: "dashboard", label: "Analitika", icon: "dashboard" },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -3073,25 +3056,6 @@ export const AdminPanel: React.FC = () => {
                 <span className="text-[9px] font-bold tracking-tight text-center leading-tight truncate w-full">{tab.label}</span>
               </button>
             ))}
-
-            {/* 5th Slot: ☰ Hamburger Button Trigger */}
-            <button
-              onClick={() => setIsMobileDrawerOpen(true)}
-              className={`flex flex-col items-center justify-center gap-0.5 py-1 px-0.5 rounded-xl transition-all ${
-                isMobileDrawerOpen
-                  ? "text-indigo-400 font-extrabold"
-                  : isDark ? "text-slate-400 hover:text-white" : "text-slate-500 hover:text-slate-900"
-              }`}
-            >
-              <div className={`p-1 px-2.5 rounded-xl flex items-center justify-center transition-all ${
-                isMobileDrawerOpen
-                  ? "bg-indigo-500 text-white shadow-md shadow-indigo-500/30"
-                  : "bg-slate-800/20"
-              }`}>
-                <span className="material-symbols-outlined text-lg">menu</span>
-              </div>
-              <span className="text-[9px] font-bold tracking-tight text-center leading-tight truncate w-full">Barchasi</span>
-            </button>
           </>
         )}
       </div>
