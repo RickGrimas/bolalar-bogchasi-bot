@@ -7,6 +7,7 @@ export const LoginModal: React.FC = () => {
     isLoginModalOpen, 
     setIsLoginModalOpen, 
     login, 
+    loginWithoutPassword,
     loading, 
     loginError, 
     setLoginError,
@@ -32,6 +33,10 @@ export const LoginModal: React.FC = () => {
     }
   };
 
+  const handleQuickDemoLogin = async () => {
+    await loginWithoutPassword();
+  };
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
       <motion.div
@@ -52,7 +57,7 @@ export const LoginModal: React.FC = () => {
         </button>
 
         {/* Header */}
-        <div className="flex flex-col items-center text-center mt-2 mb-6">
+        <div className="flex flex-col items-center text-center mt-2 mb-4">
           <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 dark:bg-cyan-400/15 flex items-center justify-center text-cyan-600 dark:text-cyan-400 mb-2">
             <span className="material-symbols-outlined text-2xl font-bold">
               vpn_key
@@ -62,8 +67,33 @@ export const LoginModal: React.FC = () => {
             {t("settings.login")}
           </h2>
           <p className="text-[10px] text-slate-500 dark:text-gray-400 mt-1">
-            Akkauntingizga kirish uchun login va parolni kiriting
+            Akkauntingizga kirish usulini tanlang
           </p>
+        </div>
+
+        {/* Quick Demo Parent Login Button */}
+        <div className="mb-4">
+          <button
+            type="button"
+            onClick={handleQuickDemoLogin}
+            disabled={loading}
+            className="w-full py-3 px-4 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-bold text-xs rounded-2xl shadow-lg border-b-4 border-cyan-700 active:scale-98 active:border-b-0 active:translate-y-[2px] transition-all flex items-center justify-center gap-2"
+          >
+            {loading ? (
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <>
+                <span className="material-symbols-outlined text-base">bolt</span>
+                ⚡ Tezkor Ota-ona Sifatida Kirish
+              </>
+            )}
+          </button>
+        </div>
+
+        <div className="relative flex py-1 items-center mb-4">
+          <div className="flex-grow border-t border-gray-200 dark:border-slate-800"></div>
+          <span className="flex-shrink mx-3 text-[10px] font-bold text-gray-400 uppercase">yoki email orqali</span>
+          <div className="flex-grow border-t border-gray-200 dark:border-slate-800"></div>
         </div>
 
         {/* Error Message */}
@@ -75,7 +105,7 @@ export const LoginModal: React.FC = () => {
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-xs">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3 text-xs">
           {/* Email field */}
           <div className="flex flex-col gap-1.5 text-left text-slate-700 dark:text-gray-300 font-bold">
             <label htmlFor="login-email" className="pl-1 text-[10px]">
@@ -88,7 +118,7 @@ export const LoginModal: React.FC = () => {
               <input
                 id="login-email"
                 type="email"
-                placeholder="parent@bogcha.uz"
+                placeholder="parent1@bogcha.uz"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 text-slate-900 dark:text-white font-inter placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-cyan-500 dark:focus:border-cyan-400 transition-colors"
@@ -139,14 +169,14 @@ export const LoginModal: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-2 py-3 bg-cyan-500 hover:bg-cyan-400 text-white font-bold rounded-xl shadow-md border-b-4 border-cyan-700 hover:border-cyan-600 active:scale-98 active:border-b-0 active:translate-y-[2px] transition-all flex items-center justify-center gap-1.5"
+            className="w-full mt-1 py-2.5 bg-slate-800 hover:bg-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 text-white font-bold rounded-xl shadow-md border-b-2 border-slate-900 active:scale-98 active:translate-y-[1px] transition-all flex items-center justify-center gap-1.5"
           >
             {loading ? (
               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
             ) : (
               <>
                 <span className="material-symbols-outlined text-sm">login</span>
-                Kirish
+                Email orqali kirish
               </>
             )}
           </button>

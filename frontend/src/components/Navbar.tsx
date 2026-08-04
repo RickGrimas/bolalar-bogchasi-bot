@@ -7,7 +7,7 @@ export const Navbar: React.FC = () => {
     toggleTheme, 
     isAuthenticated, 
     logout, 
-    loginWithoutPassword, 
+    setIsLoginModalOpen,
     loading, 
     appTheme, 
     setAppTheme,
@@ -56,10 +56,10 @@ export const Navbar: React.FC = () => {
           </span>
         </button>
 
-        {/* Public view Login Button - Direct instant login to User account */}
+        {/* Public view Login Button - Opens Login Modal */}
         {!isAuthenticated && (
           <button
-            onClick={() => loginWithoutPassword()}
+            onClick={() => setIsLoginModalOpen(true)}
             disabled={loading}
             className="px-3 py-1.5 bg-cyan-500 hover:bg-cyan-400 text-white font-quicksand font-bold text-[10px] rounded-xl shadow-md border-b-2 border-cyan-700 active:scale-95 active:border-b-0 active:translate-y-[2px] transition-all flex items-center gap-1"
           >
