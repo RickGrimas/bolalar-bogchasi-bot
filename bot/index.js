@@ -103,28 +103,42 @@ bot.start((ctx) => {
 });
 
 bot.command('admin', async (ctx) => {
+  const telegramId = ctx.from.id;
+  const isAdmin = await isAdminTelegramId(telegramId);
+
+  if (!isAdmin) {
+    return ctx.reply("⚠️ Kechirasiz, ushbu bo'lim faqat bog'cha administratorlari uchun mo'ljallangan.");
+  }
+
   const miniAppUrl = getCleanWebAppUrl();
   await ctx.reply(
-    "⚙️ <b>Admin Panelga kirish</b>\n\n" +
+    "⚙️ <b>Admin Panel</b>\n\n" +
     "Admin panelni ochish uchun quyidagi tugmani bosing:",
     {
       parse_mode: 'HTML',
       ...Markup.inlineKeyboard([
-        [Markup.button.webApp("⚙️ Admin Panelni Ochish", `${miniAppUrl}/admin`)]
+        [Markup.button.webApp("⚙️ Admin Panel", `${miniAppUrl}/admin`)]
       ])
     }
   );
 });
 
 bot.hears(ADMIN_BTN, async (ctx) => {
+  const telegramId = ctx.from.id;
+  const isAdmin = await isAdminTelegramId(telegramId);
+
+  if (!isAdmin) {
+    return ctx.reply("⚠️ Kechirasiz, ushbu bo'lim faqat bog'cha administratorlari uchun mo'ljallangan.");
+  }
+
   const miniAppUrl = getCleanWebAppUrl();
   await ctx.reply(
-    "⚙️ <b>Admin Panelga kirish</b>\n\n" +
+    "⚙️ <b>Admin Panel</b>\n\n" +
     "Admin panelni ochish uchun quyidagi tugmani bosing:",
     {
       parse_mode: 'HTML',
       ...Markup.inlineKeyboard([
-        [Markup.button.webApp("⚙️ Admin Panelni Ochish", `${miniAppUrl}/admin`)]
+        [Markup.button.webApp("⚙️ Admin Panel", `${miniAppUrl}/admin`)]
       ])
     }
   );

@@ -5,12 +5,18 @@ export const ABOUT_BTN = "Bog'cha haqida ma'lumot ℹ️";
 export const APPLY_BTN = "Ariza qoldirish 📝";
 export const CONTACT_BTN = "Biz bilan bog'lanish 📞";
 export const AI_BTN = "🤖 AI Assistent Yordami";
-export const ADMIN_BTN = "⚙️ Admin Panelga kirish";
+export const ADMIN_BTN = "⚙️ Admin Panel";
 
 const escapeHTML = (str = '') => String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 export const getCleanWebAppUrl = () => {
-  let rawUrl = process.env.WEBAPP_URL || 'https://bolalar-bogchasi-bot.onrender.com';
+  let rawUrl = process.env.WEBAPP_URL;
+  
+  // If WEBAPP_URL is empty or points to a non-existent vercel URL causing 404, force use live Render URL
+  if (!rawUrl || rawUrl.includes('vercel.app') || rawUrl.includes('\n') || rawUrl.includes('\r')) {
+    return 'https://bolalar-bogchasi-bot.onrender.com';
+  }
+
   rawUrl = String(rawUrl).trim().replace(/[\r\n\t"'\s]+/g, '').replace(/\/+$/, '');
   
   if (!rawUrl.startsWith('http://') && !rawUrl.startsWith('https://')) {
@@ -47,16 +53,12 @@ export async function buildMainMenuKeyboard(telegramId) {
       keyboard.push([CONTACT_BTN, AI_BTN]);
     }
 
-    // Always include Admin Panel button in reply keyboard
-    keyboard.push([ADMIN_BTN]);
-
     return Markup.keyboard(keyboard).resize();
   } catch (err) {
     console.error("Error building main menu keyboard:", err.message);
     return Markup.keyboard([
       [ABOUT_BTN, APPLY_BTN],
-      [CONTACT_BTN, AI_BTN],
-      [ADMIN_BTN]
+      [CONTACT_BTN, AI_BTN]
     ]).resize();
   }
 }
@@ -69,36 +71,43 @@ export async function handleStart(ctx) {
     const telegramId = ctx.from.id;
     const firstName = escapeHTML(ctx.from.first_name || 'Foydalanuvchi');
     const miniAppUrl = getCleanWebAppUrl();
+    const isAdmin = await isAdminTelegramId(telegramId);
 
-    console.log(`[handleStart] Clean miniAppUrl: "${miniAppUrl}" for tgId: ${telegramId}`);
+    console.log(`[handleStart] User ${telegramId} (${firstName}), isAdmin: ${isAdmin}, miniAppUrl: ${miniAppUrl}`);
 
     const welcomeText = 
       `Assalomu alaykum, <b>${firstName}</b>!\n\n` +
       `"Porloq Kelajak" zamonaviy bolalar bog'chasining rasmiy botiga xush kelibsiz.\n\n` +
-      `📱 <b>Web Ilova</b> va ⚙️ <b>Admin Panel</b>ga kirish uchun quyidagi alohida tugmalardan foydalanishingiz mumkin:`;
+      `Quyidagi menyu orqali bog'chamiz haqida ma'lumot olishingiz, ariza qoldirishingiz yoki biz bilan bog'lanishingiz mumkin.`;
 
-    // Send Welcome with standalone Inline WebApp buttons
-    const inlineButtons = Markup.inlineKeyboard([
-      [Markup.button.webApp("📱 Web Ilovani Ochish", miniAppUrl)],
-      [Markup.button.webApp("⚙️ Admin Panelga Kirish", `${miniAppUrl}/admin`)]
-    ]);
-
-    // Send welcome text with inline WebApp buttons
-    await ctx.reply(welcomeText, {
-      parse_mode: 'HTML',
-      ...inlineButtons
-    });
-
-    // Send Main Reply Keyboard for bottom chat actions
     const replyKeyboard = await buildMainMenuKeyboard(telegramId);
-    await ctx.reply("👇 Quyidagi menyu orqali bot imkoniyatlaridan foydalanishingiz mumkin:", replyKeyboard);
+
+    if (isAdmin) {
+      // For Admin Users: Show Admin Panel Inline Button + Reply Keyboard
+      const adminInlineKeyboard = Markup.inlineKeyboard([
+        [Markup.button.webApp("⚙️ Admin Panel", `${miniAppUrl}/admin`)]
+      ]);
+
+      await ctx.reply(welcomeText, {
+        parse_mode: 'HTML',
+        ...adminInlineKeyboard
+      });
+
+      // Send chat reply menu cleanly
+      await ctx.reply("📍 Asosiy menyu:", replyKeyboard);
+    } else {
+      // For Normal Users: Send welcome text with Reply Keyboard in 1 single message
+      await ctx.reply(welcomeText, {
+        parse_mode: 'HTML',
+        ...replyKeyboard
+      });
+    }
   } catch (err) {
-    console.error("❌ Critical error in handleStart:", err);
+    console.error("❌ Error in handleStart:", err);
     try {
       const fallbackKeyboard = Markup.keyboard([
         [ABOUT_BTN, APPLY_BTN],
-        [CONTACT_BTN, AI_BTN],
-        [ADMIN_BTN]
+        [CONTACT_BTN, AI_BTN]
       ]).resize();
       await ctx.reply("Assalomu alaykum! Xush kelibsiz. Botdan foydalanish uchun pastdagi menyuni tanlang:", fallbackKeyboard);
     } catch (e) {
