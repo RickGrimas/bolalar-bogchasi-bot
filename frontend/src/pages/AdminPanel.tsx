@@ -47,8 +47,9 @@ export const AdminPanel: React.FC = () => {
   const [adminPassword, setAdminPassword] = useState("admin");
   const [loggingIn, setLoggingIn] = useState(false);
 
-  // Settings Gear Modal State
+  // Settings Gear Modal & Mobile Hamburger Drawer State
   const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
   // Core App Modes & Tabs State (Strictly Separated)
   const [mode, setMode] = useState<Mode>("CMS");
@@ -670,8 +671,21 @@ export const AdminPanel: React.FC = () => {
           </span>
         </div>
 
-        {/* Top Right Controls (Settings Gear ⚙️ Popover Dropdown) */}
-        <div className="flex items-center gap-3 relative">
+        {/* Top Right Controls (Settings Gear ⚙️ & Mobile Hamburger ☰) */}
+        <div className="flex items-center gap-2 sm:gap-3 relative">
+          {/* Mobile Hamburger ☰ Drawer Trigger */}
+          <button
+            onClick={() => setIsMobileDrawerOpen((prev) => !prev)}
+            className={`p-2.5 rounded-2xl border transition-all flex md:hidden items-center justify-center shadow-sm ${
+              isMobileDrawerOpen 
+                ? "border-cyan-500 bg-cyan-500/10 text-cyan-400 ring-2 ring-cyan-500/30" 
+                : isDark ? "border-slate-800 text-slate-300 hover:bg-slate-900" : "border-slate-200 text-slate-700 hover:bg-slate-100"
+            }`}
+            title="Barcha Menyular (☰)"
+          >
+            <span className="material-symbols-outlined text-xl">menu</span>
+          </button>
+
           <button
             onClick={() => setShowSettingsModal((prev) => !prev)}
             className={`p-2.5 rounded-2xl border transition-all flex items-center justify-center shadow-sm ${
@@ -2977,8 +2991,8 @@ export const AdminPanel: React.FC = () => {
         </main>
       </div>
 
-      {/* FIXED MOBILE BOTTOM NAVIGATION DOCK (Positioned at bottom of screen on mobile devices md:hidden) */}
-      <div className={`fixed bottom-0 left-0 right-0 z-40 flex md:hidden overflow-x-auto scrollbar-none p-1.5 border-t shadow-2xl backdrop-blur-xl gap-1 justify-around transition-colors duration-300 ${
+      {/* 5-SLOT MOBILE BOTTOM NAVIGATION DOCK (Strict 5 Columns: 4 Main Tabs + 1 Hamburger Menu Trigger) */}
+      <div className={`fixed bottom-0 left-0 right-0 z-40 grid grid-cols-5 md:hidden p-1.5 border-t shadow-2xl backdrop-blur-xl transition-colors duration-300 ${
         isDark ? "bg-slate-950/95 border-slate-800/90 text-slate-100" : "bg-white/95 border-slate-200 text-slate-900 shadow-2xl"
       }`}>
         {mode === "CMS" ? (
@@ -2988,26 +3002,47 @@ export const AdminPanel: React.FC = () => {
               { id: "life", label: t("admin.cms.life"), icon: "sports_esports" },
               { id: "about", label: t("admin.cms.about"), icon: "diversity_3" },
               { id: "ai", label: t("admin.cms.ai"), icon: "neurology" },
-              { id: "bot_settings", label: "Bot", icon: "settings_suggest" },
-              { id: "apply", label: "CRM", icon: "assignment" },
-              { id: "admins", label: "Adminlar", icon: "admin_panel_settings" },
-              { id: "help", label: t("admin.cms.help"), icon: "help" },
             ].map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveCmsTab(tab.id)}
-                className={`flex-1 min-w-[54px] py-1.5 px-1 rounded-xl font-bold text-[9px] sm:text-[10px] flex flex-col items-center justify-center gap-0.5 whitespace-nowrap transition-all ${
+                className={`flex flex-col items-center justify-center gap-0.5 py-1 px-0.5 rounded-xl transition-all ${
                   activeCmsTab === tab.id 
-                    ? "bg-cyan-500 text-white shadow-md shadow-cyan-500/20 font-extrabold" 
+                    ? "text-cyan-400 font-extrabold" 
                     : isDark 
                       ? "text-slate-400 hover:text-white" 
-                      : "text-slate-600 hover:text-slate-900"
+                      : "text-slate-500 hover:text-slate-900"
                 }`}
               >
-                <span className="material-symbols-outlined text-base sm:text-lg">{tab.icon}</span>
-                <span className="truncate max-w-[64px]">{tab.label}</span>
+                <div className={`p-1 px-2.5 rounded-xl flex items-center justify-center transition-all ${
+                  activeCmsTab === tab.id
+                    ? "bg-cyan-500 text-white shadow-md shadow-cyan-500/30"
+                    : "bg-transparent"
+                }`}>
+                  <span className="material-symbols-outlined text-lg">{tab.icon}</span>
+                </div>
+                <span className="text-[9px] font-bold tracking-tight text-center leading-tight truncate w-full">{tab.label}</span>
               </button>
             ))}
+
+            {/* 5th Slot: ☰ Hamburger Button Trigger */}
+            <button
+              onClick={() => setIsMobileDrawerOpen(true)}
+              className={`flex flex-col items-center justify-center gap-0.5 py-1 px-0.5 rounded-xl transition-all ${
+                isMobileDrawerOpen
+                  ? "text-cyan-400 font-extrabold"
+                  : isDark ? "text-slate-400 hover:text-white" : "text-slate-500 hover:text-slate-900"
+              }`}
+            >
+              <div className={`p-1 px-2.5 rounded-xl flex items-center justify-center transition-all ${
+                isMobileDrawerOpen
+                  ? "bg-cyan-500 text-white shadow-md shadow-cyan-500/30"
+                  : "bg-slate-800/20"
+              }`}>
+                <span className="material-symbols-outlined text-lg">menu</span>
+              </div>
+              <span className="text-[9px] font-bold tracking-tight text-center leading-tight truncate w-full">Barchasi</span>
+            </button>
           </>
         ) : (
           <>
@@ -3016,30 +3051,163 @@ export const AdminPanel: React.FC = () => {
               { id: "leads", label: "AI Lead", icon: "contacts" },
               { id: "groups", label: t("admin.crm.groups"), icon: "group_work" },
               { id: "messages", label: t("admin.crm.messages"), icon: "campaign" },
-              { id: "dashboard", label: t("admin.crm.dashboard"), icon: "dashboard" },
-              { id: "timeline", label: t("admin.crm.timeline"), icon: "history" },
-              { id: "cameras", label: t("admin.crm.cameras"), icon: "videocam" },
-              { id: "tasks", label: t("admin.crm.tasks"), icon: "task" },
-              { id: "profile", label: t("admin.crm.profile"), icon: "person" },
             ].map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveCrmTab(tab.id)}
-                className={`flex-1 min-w-[54px] py-1.5 px-1 rounded-xl font-bold text-[9px] sm:text-[10px] flex flex-col items-center justify-center gap-0.5 whitespace-nowrap transition-all ${
+                className={`flex flex-col items-center justify-center gap-0.5 py-1 px-0.5 rounded-xl transition-all ${
                   activeCrmTab === tab.id 
-                    ? "bg-indigo-500 text-white shadow-md shadow-indigo-500/20 font-extrabold" 
+                    ? "text-indigo-400 font-extrabold" 
                     : isDark 
                       ? "text-slate-400 hover:text-white" 
-                      : "text-slate-600 hover:text-slate-900"
+                      : "text-slate-500 hover:text-slate-900"
                 }`}
               >
-                <span className="material-symbols-outlined text-base sm:text-lg">{tab.icon}</span>
-                <span className="truncate max-w-[64px]">{tab.label}</span>
+                <div className={`p-1 px-2.5 rounded-xl flex items-center justify-center transition-all ${
+                  activeCrmTab === tab.id
+                    ? "bg-indigo-500 text-white shadow-md shadow-indigo-500/30"
+                    : "bg-transparent"
+                }`}>
+                  <span className="material-symbols-outlined text-lg">{tab.icon}</span>
+                </div>
+                <span className="text-[9px] font-bold tracking-tight text-center leading-tight truncate w-full">{tab.label}</span>
               </button>
             ))}
+
+            {/* 5th Slot: ☰ Hamburger Button Trigger */}
+            <button
+              onClick={() => setIsMobileDrawerOpen(true)}
+              className={`flex flex-col items-center justify-center gap-0.5 py-1 px-0.5 rounded-xl transition-all ${
+                isMobileDrawerOpen
+                  ? "text-indigo-400 font-extrabold"
+                  : isDark ? "text-slate-400 hover:text-white" : "text-slate-500 hover:text-slate-900"
+              }`}
+            >
+              <div className={`p-1 px-2.5 rounded-xl flex items-center justify-center transition-all ${
+                isMobileDrawerOpen
+                  ? "bg-indigo-500 text-white shadow-md shadow-indigo-500/30"
+                  : "bg-slate-800/20"
+              }`}>
+                <span className="material-symbols-outlined text-lg">menu</span>
+              </div>
+              <span className="text-[9px] font-bold tracking-tight text-center leading-tight truncate w-full">Barchasi</span>
+            </button>
           </>
         )}
       </div>
+
+      {/* SLIDE-OVER MOBILE SIDEBAR DRAWER (☰ MENU) */}
+      {isMobileDrawerOpen && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex justify-end md:hidden animate-fade-in">
+          {/* Backdrop Click Dismiss Area */}
+          <div className="flex-1" onClick={() => setIsMobileDrawerOpen(false)} />
+
+          {/* Drawer Content Panel */}
+          <div className={`w-80 max-w-[85vw] h-full flex flex-col justify-between p-5 border-l shadow-2xl transition-colors duration-300 animate-slide-in-right ${
+            isDark ? "bg-slate-950 border-slate-800 text-slate-100" : "bg-white border-slate-200 text-slate-900"
+          }`}>
+            <div className="flex flex-col gap-4 overflow-y-auto">
+              {/* Drawer Header */}
+              <div className="flex items-center justify-between pb-3 border-b border-inherit">
+                <div className="flex items-center gap-2">
+                  <span className="material-symbols-outlined text-cyan-400 text-xl font-bold">menu</span>
+                  <span className="font-bold text-sm">Barcha Menyular ({mode})</span>
+                </div>
+                <button
+                  onClick={() => setIsMobileDrawerOpen(false)}
+                  className="p-1.5 rounded-full text-slate-400 hover:text-white transition-colors"
+                >
+                  <span className="material-symbols-outlined text-lg">close</span>
+                </button>
+              </div>
+
+              {/* Mode Switcher inside Drawer */}
+              <div className={`grid grid-cols-2 gap-1.5 p-1 rounded-2xl border ${isDark ? "bg-slate-900 border-slate-800" : "bg-slate-100 border-slate-200"}`}>
+                <button
+                  onClick={() => { setMode("CMS"); setActiveCmsTab("home"); setIsMobileDrawerOpen(false); }}
+                  className={`py-2 rounded-xl font-bold text-xs transition-all ${
+                    mode === "CMS" ? "bg-cyan-500 text-white shadow" : "text-slate-400"
+                  }`}
+                >
+                  🌐 CMS Sayt
+                </button>
+                <button
+                  onClick={() => { setMode("CRM"); setActiveCrmTab("children"); setIsMobileDrawerOpen(false); }}
+                  className={`py-2 rounded-xl font-bold text-xs transition-all ${
+                    mode === "CRM" ? "bg-indigo-500 text-white shadow" : "text-slate-400"
+                  }`}
+                >
+                  🔒 CRM Tizimi
+                </button>
+              </div>
+
+              {/* Full List of Tabs */}
+              <nav className="flex flex-col gap-1.5 mt-2">
+                {mode === "CMS" ? (
+                  [
+                    { id: "home", label: t("admin.cms.home"), icon: "home" },
+                    { id: "life", label: t("admin.cms.life"), icon: "sports_esports" },
+                    { id: "about", label: t("admin.cms.about"), icon: "diversity_3" },
+                    { id: "ai", label: t("admin.cms.ai"), icon: "neurology" },
+                    { id: "bot_settings", label: "🤖 Bot Sozlamalari", icon: "settings_suggest" },
+                    { id: "apply", label: "CRM ni Boshqarish", icon: "assignment" },
+                    { id: "admins", label: "Adminlar & Vakolatlar", icon: "admin_panel_settings" },
+                    { id: "help", label: t("admin.cms.help"), icon: "help" },
+                  ].map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => { setActiveCmsTab(tab.id); setIsMobileDrawerOpen(false); }}
+                      className={`w-full py-2.5 px-3.5 rounded-xl font-bold text-xs flex items-center gap-3 transition-all ${
+                        activeCmsTab === tab.id
+                          ? "bg-cyan-500 text-white shadow-md font-extrabold"
+                          : isDark
+                            ? "text-slate-400 hover:bg-slate-900 hover:text-white"
+                            : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                      }`}
+                    >
+                      <span className="material-symbols-outlined text-lg">{tab.icon}</span>
+                      <span>{tab.label}</span>
+                    </button>
+                  ))
+                ) : (
+                  [
+                    { id: "children", label: t("admin.crm.children"), icon: "boy" },
+                    { id: "leads", label: "🤖 AI Leadlar", icon: "contacts" },
+                    { id: "groups", label: t("admin.crm.groups"), icon: "group_work" },
+                    { id: "messages", label: t("admin.crm.messages"), icon: "campaign" },
+                    { id: "dashboard", label: t("admin.crm.dashboard"), icon: "dashboard" },
+                    { id: "timeline", label: t("admin.crm.timeline"), icon: "history" },
+                    { id: "cameras", label: t("admin.crm.cameras"), icon: "videocam" },
+                    { id: "tasks", label: t("admin.crm.tasks"), icon: "task" },
+                    { id: "profile", label: t("admin.crm.profile"), icon: "person" },
+                  ].map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => { setActiveCrmTab(tab.id); setIsMobileDrawerOpen(false); }}
+                      className={`w-full py-2.5 px-3.5 rounded-xl font-bold text-xs flex items-center gap-3 transition-all ${
+                        activeCrmTab === tab.id
+                          ? "bg-indigo-500 text-white shadow-md font-extrabold"
+                          : isDark
+                            ? "text-slate-400 hover:bg-slate-900 hover:text-white"
+                            : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                      }`}
+                    >
+                      <span className="material-symbols-outlined text-lg">{tab.icon}</span>
+                      <span>{tab.label}</span>
+                    </button>
+                  ))
+                )}
+              </nav>
+            </div>
+
+            {/* Drawer Footer */}
+            <div className="pt-4 border-t border-inherit flex items-center justify-between text-[11px] font-bold text-slate-400">
+              <span>Versiya 2.0.0</span>
+              <span>CloudCare Admin</span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
