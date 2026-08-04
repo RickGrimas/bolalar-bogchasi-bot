@@ -778,8 +778,8 @@ export const AdminPanel: React.FC = () => {
       {/* 2-PANEL LAYOUT (LEFT CONTROL PANEL SIDEBAR + RIGHT WORKSPACE PANEL) */}
       <div className="flex-1 flex overflow-hidden relative">
         
-        {/* LEFT CONTROL PANEL (SIDEBAR) */}
-        <aside className={`w-64 border-r flex flex-col justify-between flex-shrink-0 z-20 shadow-xl transition-colors duration-300 ${
+        {/* LEFT CONTROL PANEL (SIDEBAR - Visible on Desktop md:flex, Hidden on Mobile) */}
+        <aside className={`hidden md:flex w-64 border-r flex-col justify-between flex-shrink-0 z-20 shadow-xl transition-colors duration-300 ${
           isDark ? "bg-slate-950 border-slate-800/80 text-slate-100" : "bg-white border-slate-200 text-slate-900"
         }`}>
           <div className="flex flex-col flex-1 overflow-y-auto p-4 gap-4 scrollbar-none">
@@ -870,10 +870,74 @@ export const AdminPanel: React.FC = () => {
           </div>
         </aside>
 
-        {/* RIGHT WORKSPACE PANEL (CONTENT AREA) */}
+        {/* RIGHT WORKSPACE PANEL (CONTENT AREA - 100% Full Width on Mobile) */}
         <main className={`flex-1 flex flex-col overflow-hidden z-10 w-full max-w-full transition-colors duration-300 ${
           isDark ? "bg-slate-950 text-slate-100" : "bg-slate-50 text-slate-900"
         }`}>
+
+          {/* MOBILE TOUCH NAVIGATION BAR (Visible only on mobile devices md:hidden) */}
+          <div className={`flex md:hidden overflow-x-auto scrollbar-none p-2 border-b gap-2 flex-shrink-0 z-20 transition-colors duration-300 ${
+            isDark ? "bg-slate-950/95 border-slate-800/80 text-slate-100" : "bg-white/95 border-slate-200 text-slate-900"
+          }`}>
+            {mode === "CMS" ? (
+              <>
+                {[
+                  { id: "home", label: t("admin.cms.home"), icon: "home" },
+                  { id: "life", label: t("admin.cms.life"), icon: "sports_esports" },
+                  { id: "about", label: t("admin.cms.about"), icon: "diversity_3" },
+                  { id: "ai", label: t("admin.cms.ai"), icon: "neurology" },
+                  { id: "bot_settings", label: "🤖 Bot Sozlamalari", icon: "settings_suggest" },
+                  { id: "apply", label: "CRM ni Boshqarish", icon: "assignment" },
+                  { id: "admins", label: "Adminlar & Vakolatlar", icon: "admin_panel_settings" },
+                  { id: "help", label: t("admin.cms.help"), icon: "help" },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveCmsTab(tab.id)}
+                    className={`flex-shrink-0 py-2 px-3.5 rounded-xl font-bold text-xs flex items-center gap-2 whitespace-nowrap transition-all ${
+                      activeCmsTab === tab.id 
+                        ? "bg-cyan-500 text-white shadow-md shadow-cyan-500/20 font-extrabold" 
+                        : isDark 
+                          ? "bg-slate-900 text-slate-400 border border-slate-800/80" 
+                          : "bg-slate-100 text-slate-600 border border-slate-200"
+                    }`}
+                  >
+                    <span className="material-symbols-outlined text-base">{tab.icon}</span>
+                    <span>{tab.label}</span>
+                  </button>
+                ))}
+              </>
+            ) : (
+              <>
+                {[
+                  { id: "children", label: t("admin.crm.children"), icon: "boy" },
+                  { id: "leads", label: "🤖 AI Leadlar", icon: "contacts" },
+                  { id: "groups", label: t("admin.crm.groups"), icon: "group_work" },
+                  { id: "messages", label: t("admin.crm.messages"), icon: "campaign" },
+                  { id: "dashboard", label: t("admin.crm.dashboard"), icon: "dashboard" },
+                  { id: "timeline", label: t("admin.crm.timeline"), icon: "history" },
+                  { id: "cameras", label: t("admin.crm.cameras"), icon: "videocam" },
+                  { id: "tasks", label: t("admin.crm.tasks"), icon: "task" },
+                  { id: "profile", label: t("admin.crm.profile"), icon: "person" },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveCrmTab(tab.id)}
+                    className={`flex-shrink-0 py-2 px-3.5 rounded-xl font-bold text-xs flex items-center gap-2 whitespace-nowrap transition-all ${
+                      activeCrmTab === tab.id 
+                        ? "bg-indigo-500 text-white shadow-md shadow-indigo-500/20 font-extrabold" 
+                        : isDark 
+                          ? "bg-slate-900 text-slate-400 border border-slate-800/80" 
+                          : "bg-slate-100 text-slate-600 border border-slate-200"
+                    }`}
+                  >
+                    <span className="material-symbols-outlined text-base">{tab.icon}</span>
+                    <span>{tab.label}</span>
+                  </button>
+                ))}
+              </>
+            )}
+          </div>
           
           {/* STATIC UNMOVING WORKSPACE CONTROL HEADER BAR */}
           <div className={`p-4 md:px-8 md:py-5 border-b flex-shrink-0 flex items-center justify-between z-20 backdrop-blur-md transition-colors ${
