@@ -18,18 +18,18 @@ export const Home: React.FC = () => {
   const slides = Array.isArray(homeData.slides)
     ? homeData.slides
     : [
-        { url: "/images/slide1.svg", caption: t("home.caption1") },
-        { url: "/images/slide2.svg", caption: t("home.caption2") },
-        { url: "/images/slide3.svg", caption: t("home.caption3") },
-        { url: "/images/slide4.svg", caption: t("home.caption4") }
+        { url: "/images/slide1.jpg", caption: t("home.caption1") },
+        { url: "/images/slide2.jpg", caption: t("home.caption2") },
+        { url: "/images/slide3.jpg", caption: t("home.caption3") },
+        { url: "/images/slide4.jpg", caption: t("home.caption4") }
       ];
 
   const goalTitle = homeData.goal?.title !== undefined ? homeData.goal.title : t("home.goal.title");
   const goalDesc = homeData.goal?.desc !== undefined ? homeData.goal.desc : t("home.goal.desc");
-  const goalImage = homeData.goal?.image ? homeData.goal.image : "/images/goal.svg";
+  const goalImage = homeData.goal?.image ? homeData.goal.image : "/images/goal.jpg";
 
   const infoTitle = homeData.info?.title !== undefined ? homeData.info.title : t("home.info.title");
-  const infoImage = homeData.info?.image ? homeData.info.image : "/images/info.svg";
+  const infoImage = homeData.info?.image ? homeData.info.image : "/images/info.jpg";
   const infoItems = Array.isArray(homeData.info?.items)
     ? homeData.info.items
     : [t("home.info.li1"), t("home.info.li2"), t("home.info.li3")];
@@ -38,8 +38,8 @@ export const Home: React.FC = () => {
   const newsItems = Array.isArray(homeData.news)
     ? homeData.news
     : [
-        { title: t("home.news1.title"), desc: t("home.news1.desc"), image: "/images/news1.svg" },
-        { title: t("home.news2.title"), desc: t("home.news2.desc"), image: "/images/news2.svg" }
+        { title: t("home.news1.title"), desc: t("home.news1.desc"), image: "/images/news1.jpg" },
+        { title: t("home.news2.title"), desc: t("home.news2.desc"), image: "/images/news2.jpg" }
       ];
 
   const [currentSlide, setCurrentSlide] = useState(0);

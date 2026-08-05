@@ -23,17 +23,17 @@ export const Life: React.FC = () => {
         {
           title: t("life.act1.title"),
           desc: t("life.act1.desc"),
-          image: "/images/act1.svg",
+          image: "/images/act1.jpg",
         },
         {
           title: t("life.act2.title"),
           desc: t("life.act2.desc"),
-          image: "/images/act2.svg",
+          image: "/images/act2.jpg",
         },
         {
           title: t("life.act3.title"),
           desc: t("life.act3.desc"),
-          image: "/images/act3.svg",
+          image: "/images/act3.jpg",
         },
       ];
 

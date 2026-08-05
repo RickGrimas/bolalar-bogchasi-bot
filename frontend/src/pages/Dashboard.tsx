@@ -52,12 +52,12 @@ export const Dashboard: React.FC = () => {
     {
       title: "Ertaga bayram tadbiri!",
       text: "Ertaga soat 10:00 da bolajonlar ishtirokida festival bo'ladi. Bolalarni bayramona kiyimda olib keling.",
-      image: "/images/news1.svg",
+      image: "/images/news1.jpg",
     },
     {
       title: "Tibbiy ko'rik",
       text: "Juma kuni bog'chamizda bolalar uchun rejaviy shifokor ko'rigi tashkil etiladi.",
-      image: "/images/news2.svg",
+      image: "/images/news2.jpg",
     },
   ];
 
@@ -79,7 +79,7 @@ export const Dashboard: React.FC = () => {
           {/* Child Photo */}
           <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-cyan-400/40 shadow-sm flex-shrink-0">
             <ImageWithFallback
-              src="/images/child_avatar.svg"
+              src="/images/child_avatar.jpg"
               alt={`${currentChild.first_name}`}
               icon="face"
               className="w-full h-full"

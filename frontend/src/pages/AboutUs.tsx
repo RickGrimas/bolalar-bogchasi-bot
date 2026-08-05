@@ -19,7 +19,7 @@ export const AboutUs: React.FC = () => {
 
   const titleText = aboutData.title !== undefined ? aboutData.title : t("about.title");
   const subtitleText = aboutData.subtitle !== undefined ? aboutData.subtitle : t("about.subtitle");
-  const headerImage = aboutData.header_image || "/images/about_header.svg";
+  const headerImage = aboutData.header_image || "/images/about_header.jpg";
 
   const stats = Array.isArray(aboutData.stats) && aboutData.stats.length > 0
     ? aboutData.stats
@@ -30,13 +30,13 @@ export const AboutUs: React.FC = () => {
       ];
 
   const defaultSections = [
-    { icon: "🌿", image: "/images/slide1.svg" },
-    { icon: "👨‍🏫", image: "/images/slide2.svg" },
-    { icon: "🎓", image: "/images/slide3.svg" },
-    { icon: "🏫", image: "/images/slide4.svg" },
-    { icon: "📜", image: "/images/goal.svg" },
-    { icon: "💳", image: "/images/info.svg" },
-    { icon: "⭐", image: "/images/news1.svg" },
+    { icon: "🌿", image: "/images/slide1.jpg" },
+    { icon: "👨‍🏫", image: "/images/slide2.jpg" },
+    { icon: "🎓", image: "/images/slide3.jpg" },
+    { icon: "🏫", image: "/images/slide4.jpg" },
+    { icon: "📜", image: "/images/goal.jpg" },
+    { icon: "💳", image: "/images/info.jpg" },
+    { icon: "⭐", image: "/images/news1.jpg" },
   ];
 
   const rawSections = Array.isArray(aboutData.sections) && aboutData.sections.length > 0
@@ -54,14 +54,14 @@ export const AboutUs: React.FC = () => {
   const sections = rawSections.map((sec: any, idx: number) => ({
     ...sec,
     icon: sec.icon || defaultSections[idx % defaultSections.length]?.icon || "⭐",
-    image: sec.image || defaultSections[idx % defaultSections.length]?.image || "/images/slide1.svg"
+    image: sec.image || defaultSections[idx % defaultSections.length]?.image || "/images/slide1.jpg"
   }));
 
   const defaultTeam = [
-    { image: "/images/team1.svg", isLeader: true },
-    { image: "/images/team1.svg", isLeader: false },
-    { image: "/images/team1.svg", isLeader: false },
-    { image: "/images/team1.svg", isLeader: false },
+    { image: "/images/team1.jpg", isLeader: true },
+    { image: "/images/team1.jpg", isLeader: false },
+    { image: "/images/team1.jpg", isLeader: false },
+    { image: "/images/team1.jpg", isLeader: false },
   ];
 
   const rawTeam = Array.isArray(aboutData.team) && aboutData.team.length > 0
@@ -75,7 +75,7 @@ export const AboutUs: React.FC = () => {
 
   const team = rawTeam.map((mem: any, idx: number) => ({
     ...mem,
-    image: mem.image || defaultTeam[idx % defaultTeam.length]?.image || "/images/team1.svg",
+    image: mem.image || defaultTeam[idx % defaultTeam.length]?.image || "/images/team1.jpg",
     isLeader: mem.isLeader !== undefined ? mem.isLeader : (defaultTeam[idx % defaultTeam.length]?.isLeader || false)
   }));
 
