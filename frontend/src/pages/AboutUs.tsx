@@ -19,7 +19,7 @@ export const AboutUs: React.FC = () => {
 
   const titleText = aboutData.title !== undefined ? aboutData.title : t("about.title");
   const subtitleText = aboutData.subtitle !== undefined ? aboutData.subtitle : t("about.subtitle");
-  const headerImage = aboutData.header_image || "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?q=80&w=800&auto=format&fit=crop";
+  const headerImage = aboutData.header_image || "/images/about_header.svg";
 
   const stats = Array.isArray(aboutData.stats) && aboutData.stats.length > 0
     ? aboutData.stats
@@ -30,13 +30,13 @@ export const AboutUs: React.FC = () => {
       ];
 
   const defaultSections = [
-    { icon: "🌿", image: "https://images.unsplash.com/photo-1596464716127-f2a82984de30?q=80&w=400&auto=format&fit=crop" },
-    { icon: "👨‍🏫", image: "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?q=80&w=400&auto=format&fit=crop" },
-    { icon: "🎓", image: "https://images.unsplash.com/photo-1587654780291-39c9404d746b?q=80&w=400&auto=format&fit=crop" },
-    { icon: "🏫", image: "https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=400&auto=format&fit=crop" },
-    { icon: "📜", image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=400&auto=format&fit=crop" },
-    { icon: "💳", image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=400&auto=format&fit=crop" },
-    { icon: "⭐", image: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?q=80&w=400&auto=format&fit=crop" },
+    { icon: "🌿", image: "/images/slide1.svg" },
+    { icon: "👨‍🏫", image: "/images/slide2.svg" },
+    { icon: "🎓", image: "/images/slide3.svg" },
+    { icon: "🏫", image: "/images/slide4.svg" },
+    { icon: "📜", image: "/images/goal.svg" },
+    { icon: "💳", image: "/images/info.svg" },
+    { icon: "⭐", image: "/images/news1.svg" },
   ];
 
   const rawSections = Array.isArray(aboutData.sections) && aboutData.sections.length > 0
@@ -54,14 +54,14 @@ export const AboutUs: React.FC = () => {
   const sections = rawSections.map((sec: any, idx: number) => ({
     ...sec,
     icon: sec.icon || defaultSections[idx % defaultSections.length]?.icon || "⭐",
-    image: sec.image || defaultSections[idx % defaultSections.length]?.image || "https://images.unsplash.com/photo-1516627145497-ae6968895b74?q=80&w=400&auto=format&fit=crop"
+    image: sec.image || defaultSections[idx % defaultSections.length]?.image || "/images/slide1.svg"
   }));
 
   const defaultTeam = [
-    { image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop", isLeader: true },
-    { image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop", isLeader: false },
-    { image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&auto=format&fit=crop", isLeader: false },
-    { image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop", isLeader: false },
+    { image: "/images/team1.svg", isLeader: true },
+    { image: "/images/team1.svg", isLeader: false },
+    { image: "/images/team1.svg", isLeader: false },
+    { image: "/images/team1.svg", isLeader: false },
   ];
 
   const rawTeam = Array.isArray(aboutData.team) && aboutData.team.length > 0
@@ -75,7 +75,7 @@ export const AboutUs: React.FC = () => {
 
   const team = rawTeam.map((mem: any, idx: number) => ({
     ...mem,
-    image: mem.image || defaultTeam[idx % defaultTeam.length]?.image || "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop",
+    image: mem.image || defaultTeam[idx % defaultTeam.length]?.image || "/images/team1.svg",
     isLeader: mem.isLeader !== undefined ? mem.isLeader : (defaultTeam[idx % defaultTeam.length]?.isLeader || false)
   }));
 

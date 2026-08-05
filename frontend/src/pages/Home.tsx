@@ -18,18 +18,18 @@ export const Home: React.FC = () => {
   const slides = Array.isArray(homeData.slides)
     ? homeData.slides
     : [
-        { url: "https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=600&auto=format&fit=crop", caption: t("home.caption1") },
-        { url: "https://images.unsplash.com/photo-1596464716127-f2a82984de30?q=80&w=600&auto=format&fit=crop", caption: t("home.caption2") },
-        { url: "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?q=80&w=600&auto=format&fit=crop", caption: t("home.caption3") },
-        { url: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=600&auto=format&fit=crop", caption: t("home.caption4") }
+        { url: "/images/slide1.svg", caption: t("home.caption1") },
+        { url: "/images/slide2.svg", caption: t("home.caption2") },
+        { url: "/images/slide3.svg", caption: t("home.caption3") },
+        { url: "/images/slide4.svg", caption: t("home.caption4") }
       ];
 
   const goalTitle = homeData.goal?.title !== undefined ? homeData.goal.title : t("home.goal.title");
   const goalDesc = homeData.goal?.desc !== undefined ? homeData.goal.desc : t("home.goal.desc");
-  const goalImage = homeData.goal?.image !== undefined ? homeData.goal.image : "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=400&auto=format&fit=crop";
+  const goalImage = homeData.goal?.image ? homeData.goal.image : "/images/goal.svg";
 
   const infoTitle = homeData.info?.title !== undefined ? homeData.info.title : t("home.info.title");
-  const infoImage = homeData.info?.image !== undefined ? homeData.info.image : "https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=400&auto=format&fit=crop";
+  const infoImage = homeData.info?.image ? homeData.info.image : "/images/info.svg";
   const infoItems = Array.isArray(homeData.info?.items)
     ? homeData.info.items
     : [t("home.info.li1"), t("home.info.li2"), t("home.info.li3")];
@@ -38,8 +38,8 @@ export const Home: React.FC = () => {
   const newsItems = Array.isArray(homeData.news)
     ? homeData.news
     : [
-        { title: t("home.news1.title"), desc: t("home.news1.desc"), image: "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?q=80&w=200&auto=format&fit=crop" },
-        { title: t("home.news2.title"), desc: t("home.news2.desc"), image: "https://images.unsplash.com/photo-1587654780291-39c9404d746b?q=80&w=200&auto=format&fit=crop" }
+        { title: t("home.news1.title"), desc: t("home.news1.desc"), image: "/images/news1.svg" },
+        { title: t("home.news2.title"), desc: t("home.news2.desc"), image: "/images/news2.svg" }
       ];
 
   const [currentSlide, setCurrentSlide] = useState(0);

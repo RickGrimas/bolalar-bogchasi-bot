@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bginfo" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d97706" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" rx="24" fill="url(#bginfo)" />
+  <g transform="translate(300, 180) scale(1.6)">
+    <!-- School Building Icon -->
+    <path d="M-50,30 L-50,-20 L0,-50 L50,-20 L50,30 Z" fill="#ffffff" opacity="0.9" />
+    <rect x="-15" y="0" width="30" height="30" fill="#0f172a" />
+    <circle cx="0" cy="-22" r="10" fill="#0284c7" />
+    <!-- Clock hands -->
+    <line x1="0" y1="-22" x2="0" y2="-27" stroke="#ffffff" stroke-width="2" />
+    <line x1="0" y1="-22" x2="4" y2="-22" stroke="#ffffff" stroke-width="2" />
+  </g>
+  <text x="300" y="330" font-family="'Fredoka', 'Quicksand', sans-serif" font-weight="700" font-size="22" fill="#ffffff" text-anchor="middle">
+    🏫 Zamonaviy Bog'cha Binolari va Xavfsizlik
+  </text>
+</svg>

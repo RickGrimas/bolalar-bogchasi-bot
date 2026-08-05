@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%">
+  <rect width="300" height="300" rx="150" fill="#06b6d4" />
+  <circle cx="150" cy="115" r="48" fill="#fef08a" />
+  <!-- Happy smiling face -->
+  <circle cx="135" cy="108" r="6" fill="#0f172a" />
+  <circle cx="165" cy="108" r="6" fill="#0f172a" />
+  <path d="M135,128 Q150,142 165,128" fill="none" stroke="#f43f5e" stroke-width="4" stroke-linecap="round" />
+  <path d="M75,245 C75,185 225,185 225,245 Z" fill="#0891b2" />
+</svg>

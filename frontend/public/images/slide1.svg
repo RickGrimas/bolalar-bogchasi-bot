@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0e7490" />
+      <stop offset="50%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+    <linearGradient id="palette" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f43f5e" />
+      <stop offset="25%" stop-color="#fb923c" />
+      <stop offset="50%" stop-color="#facc15" />
+      <stop offset="75%" stop-color="#4ade80" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" rx="30" fill="url(#bg1)" />
+  <circle cx="200" cy="150" r="140" fill="#38bdf8" opacity="0.15" />
+  <circle cx="650" cy="350" r="180" fill="#f43f5e" opacity="0.12" />
+  <!-- Artist Palette Icon & Paint Brush -->
+  <g transform="translate(400, 220) scale(1.8)">
+    <path d="M-60,-20 C-60,-70 60,-70 60,-20 C60,20 20,50 -20,50 C-40,50 -60,25 -60,-20 Z" fill="#ffffff" opacity="0.9" />
+    <circle cx="-30" cy="-30" r="10" fill="#ef4444" />
+    <circle cx="0" cy="-40" r="10" fill="#f59e0b" />
+    <circle cx="30" cy="-30" r="10" fill="#10b981" />
+    <circle cx="35" cy="5" r="10" fill="#06b6d4" />
+    <circle cx="0" cy="20" r="12" fill="#0f172a" opacity="0.2" />
+    <!-- Paintbrush -->
+    <path d="M20,30 L70,80 L80,70 L30,20 Z" fill="#d97706" />
+    <path d="M15,15 C10,10 20,30 25,25 Z" fill="#ec4899" />
+  </g>
+  <text x="400" y="420" font-family="'Fredoka', 'Quicksand', sans-serif" font-weight="700" font-size="28" fill="#ffffff" text-anchor="middle" letter-spacing="1">
+    🎨 Ijodiy Fikrlash va Tasviriy San'at
+  </text>
+</svg>

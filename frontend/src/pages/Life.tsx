@@ -23,17 +23,17 @@ export const Life: React.FC = () => {
         {
           title: t("life.act1.title"),
           desc: t("life.act1.desc"),
-          image: "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?q=80&w=600&auto=format&fit=crop",
+          image: "/images/act1.svg",
         },
         {
           title: t("life.act2.title"),
           desc: t("life.act2.desc"),
-          image: "https://images.unsplash.com/photo-1587654780291-39c9404d746b?q=80&w=600&auto=format&fit=crop",
+          image: "/images/act2.svg",
         },
         {
           title: t("life.act3.title"),
           desc: t("life.act3.desc"),
-          image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=600&auto=format&fit=crop",
+          image: "/images/act3.svg",
         },
       ];
 

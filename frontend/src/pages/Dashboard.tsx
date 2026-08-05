@@ -52,12 +52,12 @@ export const Dashboard: React.FC = () => {
     {
       title: "Ertaga bayram tadbiri!",
       text: "Ertaga soat 10:00 da bolajonlar ishtirokida festival bo'ladi. Bolalarni bayramona kiyimda olib keling.",
-      image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=200&auto=format&fit=crop",
+      image: "/images/news1.svg",
     },
     {
       title: "Tibbiy ko'rik",
       text: "Juma kuni bog'chamizda bolalar uchun rejaviy shifokor ko'rigi tashkil etiladi.",
-      image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?q=80&w=200&auto=format&fit=crop",
+      image: "/images/news2.svg",
     },
   ];
 
@@ -79,7 +79,7 @@ export const Dashboard: React.FC = () => {
           {/* Child Photo */}
           <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-cyan-400/40 shadow-sm flex-shrink-0">
             <ImageWithFallback
-              src="https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?q=80&w=200&auto=format&fit=crop"
+              src="/images/child_avatar.svg"
               alt={`${currentChild.first_name}`}
               icon="face"
               className="w-full h-full"
