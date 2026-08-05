@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useApp } from "../context/AppContext";
+import { ImageWithFallback } from "../components/ImageWithFallback";
 
 interface Slide {
   url: string;
@@ -84,18 +85,18 @@ export const Home: React.FC = () => {
                   className="h-full relative overflow-hidden bg-slate-100 dark:bg-slate-800"
                   style={{ width: `${100 / slides.length}%` }}
                 >
-                  {slide.url && (
-                    <img
-                      src={slide.url}
-                      alt={slide.caption || "Slide"}
-                      className="w-full h-full object-cover"
-                    />
-                  )}
+                  <ImageWithFallback
+                    src={slide.url}
+                    alt={slide.caption || "Slide"}
+                    icon="sports_esports"
+                    caption={slide.caption}
+                    className="w-full h-full"
+                  />
                   {/* Backdrop Gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
                   {/* Slide Caption */}
                   {slide.caption && (
-                    <div className="absolute bottom-3 left-4 right-4 text-left z-20">
+                    <div className="absolute bottom-3 left-4 right-4 text-left z-20 pointer-events-none">
                       <p className="text-white font-quicksand font-bold text-xs md:text-sm drop-shadow">
                         {slide.caption}
                       </p>
@@ -107,7 +108,7 @@ export const Home: React.FC = () => {
 
             {/* Dots Indicator */}
             {slides.length > 1 && (
-              <div className="absolute bottom-3 right-4 flex gap-1 z-30">
+              <div className="absolute bottom-3 right-4 flex gap-1 z-30 pointer-events-none">
                 {slides.map((_: any, idx: number) => (
                   <span
                     key={idx}
@@ -134,10 +135,11 @@ export const Home: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-3">
             {goalImage && (
               <div className="w-full sm:w-24 h-20 rounded-xl overflow-hidden flex-shrink-0">
-                <img
+                <ImageWithFallback
                   src={goalImage}
                   alt={goalTitle || "Goal"}
-                  className="w-full h-full object-cover"
+                  icon="emoji_events"
+                  className="w-full h-full"
                 />
               </div>
             )}
@@ -162,10 +164,11 @@ export const Home: React.FC = () => {
           <div className="flex flex-col sm:flex-row-reverse gap-3">
             {infoImage && (
               <div className="w-full sm:w-24 h-20 rounded-xl overflow-hidden flex-shrink-0">
-                <img
+                <ImageWithFallback
                   src={infoImage}
                   alt={infoTitle || "Info"}
-                  className="w-full h-full object-cover"
+                  icon="info"
+                  className="w-full h-full"
                 />
               </div>
             )}
@@ -197,7 +200,12 @@ export const Home: React.FC = () => {
               <div key={idx} className="flex gap-3 items-center border-b border-gray-100 dark:border-gray-800 last:border-b-0 pb-2.5 last:pb-0">
                 {news.image && (
                   <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
-                    <img src={news.image} alt={news.title || "News"} className="w-full h-full object-cover" />
+                    <ImageWithFallback
+                      src={news.image}
+                      alt={news.title || "News"}
+                      icon="campaign"
+                      className="w-full h-full"
+                    />
                   </div>
                 )}
                 <div className="flex-1 text-left">

@@ -1,5 +1,6 @@
 import React from "react";
 import { useApp } from "../context/AppContext";
+import { ImageWithFallback } from "../components/ImageWithFallback";
 
 export const Life: React.FC = () => {
   const { t, dynamicPages, draftPages, lang } = useApp();
@@ -109,8 +110,13 @@ export const Life: React.FC = () => {
             className="glass-panel rounded-2xl overflow-hidden shadow-sm flex flex-col border border-white/20 dark:border-white/5"
           >
             {act.image && (
-              <div className="h-44 w-full">
-                <img src={act.image} alt={act.title} className="w-full h-full object-cover" />
+              <div className="h-44 w-full overflow-hidden">
+                <ImageWithFallback
+                  src={act.image}
+                  alt={act.title}
+                  icon="sports_esports"
+                  className="w-full h-full"
+                />
               </div>
             )}
             <div className="p-4 text-left flex flex-col gap-1">

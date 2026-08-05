@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useApp } from "../context/AppContext";
+import { ImageWithFallback } from "../components/ImageWithFallback";
 
 const renderIcon = (iconStr: string, sizeClass: string = "text-lg") => {
   if (!iconStr) return <span className={`material-symbols-outlined ${sizeClass}`}>star</span>;
@@ -81,14 +82,15 @@ export const AboutUs: React.FC = () => {
   return (
     <div className="w-full flex-1 flex flex-col pb-20 animate-fade-in text-left">
       {/* Playful Header Section with Background Image - Edge to Edge */}
-      <section className="w-full h-52 relative shadow-md border-b border-cyan-400/20">
-        <img
+      <section className="w-full h-52 relative shadow-md border-b border-cyan-400/20 overflow-hidden">
+        <ImageWithFallback
           src={headerImage}
           alt="Biz Haqimizda Background"
-          className="w-full h-full object-cover"
+          icon="diversity_3"
+          className="w-full h-full"
         />
         {/* Dark overlay to make text stand out */}
-        <div className="absolute inset-0 bg-black/55 flex flex-col justify-end p-4 text-left">
+        <div className="absolute inset-0 bg-black/55 flex flex-col justify-end p-4 text-left z-10 pointer-events-none">
           <h2 className="font-quicksand font-bold text-2xl text-white drop-shadow-md mb-1 pt-6">
             {titleText}
           </h2>
@@ -98,16 +100,16 @@ export const AboutUs: React.FC = () => {
         </div>
       </section>
 
-      {/* Main Content Area with Padding */}
-      <div className="px-4 py-4 flex flex-col gap-5">
-        {/* Tab Switching Buttons */}
-        <div className="flex gap-2 p-1.5 bg-slate-200/60 dark:bg-slate-800/60 rounded-2xl border border-white/20 dark:border-white/5">
+      {/* Main Content Area with padding */}
+      <div className="p-4 flex flex-col gap-6">
+        {/* Navigation Sub-Tabs */}
+        <div className="flex border-b border-gray-200 dark:border-slate-800">
           <button
             onClick={() => setActiveSubTab("info")}
-            className={`flex-1 py-2 px-3 rounded-xl font-quicksand font-bold text-xs transition-all duration-300 flex items-center justify-center gap-1.5 ${
+            className={`pb-2.5 px-4 font-quicksand font-bold text-xs border-b-2 transition-all flex items-center gap-1.5 ${
               activeSubTab === "info"
-                ? "bg-cyan-500 text-white shadow-md border-b-2 border-cyan-700"
-                : "text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700/50"
+                ? "border-cyan-500 text-cyan-600 dark:text-cyan-400"
+                : "border-transparent text-gray-400 hover:text-slate-600 dark:hover:text-gray-200"
             }`}
           >
             <span className="material-symbols-outlined text-sm">info</span>
@@ -115,38 +117,37 @@ export const AboutUs: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveSubTab("team")}
-            className={`flex-1 py-2 px-3 rounded-xl font-quicksand font-bold text-xs transition-all duration-300 flex items-center justify-center gap-1.5 ${
+            className={`pb-2.5 px-4 font-quicksand font-bold text-xs border-b-2 transition-all flex items-center gap-1.5 ${
               activeSubTab === "team"
-                ? "bg-cyan-500 text-white shadow-md border-b-2 border-cyan-700"
-                : "text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700/50"
+                ? "border-cyan-500 text-cyan-600 dark:text-cyan-400"
+                : "border-transparent text-gray-400 hover:text-slate-600 dark:hover:text-gray-200"
             }`}
           >
-            <span className="material-symbols-outlined text-sm">diversity_3</span>
-            {t("about.team.title")}
+            <span className="material-symbols-outlined text-sm">groups</span>
+            {t("about.tab.team")}
           </button>
         </div>
 
-        {/* Tab content 1: General Info */}
+        {/* Tab content 1: General Info & Kindergarten Stats */}
         {activeSubTab === "info" && (
-          <div className="flex flex-col gap-5 animate-fade-in">
-            {/* Statistics Cards */}
-            {stats.length > 0 && (
-              <section className="grid grid-cols-3 gap-3">
-                {stats.map((stat: any, idx: number) => (
-                  <div key={idx} className="glass-panel p-3 rounded-2xl flex flex-col items-center text-center border border-white/20 shadow-sm hover:scale-105 transition-all duration-300">
-                    <span className={`${stat.color || "text-cyan-500"} mb-1 flex items-center justify-center`}>
-                      {renderIcon(stat.icon, "text-xl")}
-                    </span>
-                    <span className="font-quicksand font-bold text-base text-on-surface dark:text-white">
-                      {stat.value}
-                    </span>
-                    <span className="font-inter text-[9px] text-on-surface-variant dark:text-gray-400 mt-0.5">
-                      {stat.label}
-                    </span>
-                  </div>
-                ))}
-              </section>
-            )}
+          <div className="flex flex-col gap-6 animate-fade-in">
+            {/* Quick Stats Grid */}
+            <section className="grid grid-cols-3 gap-2">
+              {stats.map((stat: any, idx: number) => (
+                <div
+                  key={idx}
+                  className="glass-panel p-3 rounded-2xl border border-white/20 dark:border-white/5 flex flex-col items-center justify-center text-center shadow-sm"
+                >
+                  <span className="text-xl mb-1 select-none">{renderIcon(stat.icon)}</span>
+                  <span className={`font-quicksand font-bold text-base ${stat.color || "text-cyan-500"} leading-tight`}>
+                    {stat.value}
+                  </span>
+                  <span className="font-inter text-[9px] text-on-surface-variant dark:text-gray-400 leading-tight mt-0.5">
+                    {stat.label}
+                  </span>
+                </div>
+              ))}
+            </section>
 
             {/* Visual content list with corresponding images */}
             <section className="flex flex-col gap-5">
@@ -162,10 +163,11 @@ export const AboutUs: React.FC = () => {
                     {/* Section Image */}
                     {section.image && (
                       <div className="w-full sm:w-1/3 aspect-[4/3] sm:aspect-auto sm:min-h-[120px] overflow-hidden flex-shrink-0">
-                        <img
+                        <ImageWithFallback
                           src={section.image}
                           alt={section.title}
-                          className="w-full h-full object-cover"
+                          icon="star"
+                          className="w-full h-full"
                         />
                       </div>
                     )}
@@ -215,10 +217,11 @@ export const AboutUs: React.FC = () => {
                     <div className={`w-16 h-16 rounded-full overflow-hidden border-2 shadow-inner ${
                       member.isLeader ? "border-amber-400" : "border-cyan-400"
                     }`}>
-                      <img
+                      <ImageWithFallback
                         src={member.image}
                         alt={member.name}
-                        className="w-full h-full object-cover"
+                        icon="person"
+                        className="w-full h-full"
                       />
                     </div>
                     {member.isLeader && (

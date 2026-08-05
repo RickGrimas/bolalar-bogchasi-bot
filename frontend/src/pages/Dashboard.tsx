@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useApp } from "../context/AppContext";
 import { supabase } from "../supabaseClient";
+import { ImageWithFallback } from "../components/ImageWithFallback";
 
 export const Dashboard: React.FC = () => {
   const { currentChild, user } = useApp();
@@ -77,10 +78,11 @@ export const Dashboard: React.FC = () => {
         <section className="glass-panel p-4 rounded-3xl text-left border border-white/20 shadow-sm flex items-center gap-4 bg-gradient-to-r from-cyan-500/10 to-teal-500/5">
           {/* Child Photo */}
           <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-cyan-400/40 shadow-sm flex-shrink-0">
-            <img
+            <ImageWithFallback
               src="https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?q=80&w=200&auto=format&fit=crop"
               alt={`${currentChild.first_name}`}
-              className="w-full h-full object-cover"
+              icon="face"
+              className="w-full h-full"
             />
           </div>
           {/* Child details */}
@@ -164,7 +166,12 @@ export const Dashboard: React.FC = () => {
           {announcements.map((ann, idx) => (
             <div key={idx} className="bg-white/50 dark:bg-white/5 p-3 rounded-2xl border border-white/20 dark:border-white/5 flex gap-3 items-center">
               <div className="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0">
-                <img src={ann.image} alt={ann.title} className="w-full h-full object-cover" />
+                <ImageWithFallback
+                  src={ann.image}
+                  alt={ann.title}
+                  icon="campaign"
+                  className="w-full h-full"
+                />
               </div>
               <div className="flex-1">
                 <span className="font-quicksand font-bold text-xs text-on-surface dark:text-white">
