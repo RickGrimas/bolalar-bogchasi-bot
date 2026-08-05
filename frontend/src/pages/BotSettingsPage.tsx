@@ -55,6 +55,8 @@ export const BotSettingsPage: React.FC = () => {
       .order('order_index', { ascending: true });
 
     let currentList: BotMenu[] = data ? [...data] : [];
+    const deletedTitles = JSON.parse(localStorage.getItem('deleted_bot_menus') || '[]');
+    currentList = currentList.filter(m => !deletedTitles.includes(m.title));
 
     // Deduplicate by clean title in UI list
     const uniqueMap = new Map<string, BotMenu>();
@@ -104,8 +106,9 @@ export const BotSettingsPage: React.FC = () => {
     ];
 
     for (const def of defaults) {
+      const isDeleted = deletedTitles.includes(def.title);
       const exists = deduplicatedList.some(m => (m.title || '').trim() === def.title.trim());
-      if (!exists) {
+      if (!exists && !isDeleted) {
         deduplicatedList.push({ ...def, id: `def-${def.order_index}` });
       }
     }
@@ -123,6 +126,7 @@ export const BotSettingsPage: React.FC = () => {
 
   const handleCleanDuplicates = async () => {
     setLoading(true);
+    localStorage.removeItem('deleted_bot_menus');
     const { data } = await supabase.from('bot_menus').select('*').order('created_at', { ascending: true });
     if (data && data.length > 0) {
       const seenTitles = new Set<string>();
@@ -204,7 +208,7 @@ export const BotSettingsPage: React.FC = () => {
           content_value: editingMenu.content_value,
           is_active: editingMenu.is_active
         })
-        .eq('id', editingMenu.id);
+        .eq('title', editingMenu.title);
 
       if (error && error.message.includes('bot_menus_action_type_check')) {
         const fallbackRes = await supabase
@@ -215,7 +219,7 @@ export const BotSettingsPage: React.FC = () => {
             content_value: `${editingMenu.action_type}: ${editingMenu.content_value}`,
             is_active: editingMenu.is_active
           })
-          .eq('id', editingMenu.id);
+          .eq('title', editingMenu.title);
         error = fallbackRes.error;
       }
 
@@ -267,7 +271,7 @@ export const BotSettingsPage: React.FC = () => {
       const { error } = await supabase
         .from('bot_menus')
         .update({ is_active: !menu.is_active })
-        .eq('id', menu.id);
+        .eq('title', menu.title);
       if (error) setMessage(`❌ Xatolik: ${error.message}`);
       else setMessage(`✅ Tugma statusi o'zgardi!`);
     } else {
@@ -296,10 +300,16 @@ export const BotSettingsPage: React.FC = () => {
   };
 
   const handleDeleteMenu = async (menu: BotMenu) => {
-    if (!window.confirm(`"${menu.title}" tugmasini o'chirishni tasdiqlaysizmi?`)) return;
+    if (!window.confirm(`"${menu.title}" tugmasini to'liq o'chirishni tasdiqlaysizmi?`)) return;
     setLoading(true);
+    const deletedTitles = JSON.parse(localStorage.getItem('deleted_bot_menus') || '[]');
+    if (!deletedTitles.includes(menu.title)) {
+      deletedTitles.push(menu.title);
+      localStorage.setItem('deleted_bot_menus', JSON.stringify(deletedTitles));
+    }
+
     if (menu.id && !menu.id.startsWith('def-')) {
-      const { error } = await supabase.from('bot_menus').delete().eq('id', menu.id);
+      const { error } = await supabase.from('bot_menus').delete().eq('title', menu.title);
       if (error) setMessage(`❌ O'chirishda xatolik: ${error.message}`);
       else setMessage("✅ Tugma o'chirildi!");
     } else {
