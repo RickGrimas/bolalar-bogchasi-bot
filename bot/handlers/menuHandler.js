@@ -37,14 +37,28 @@ export const getCleanWebAppUrl = () => {
  */
 export async function buildMainMenuKeyboard(telegramId) {
   try {
-    const dynamicMenus = await getMainMenus();
+    const rawDynamicMenus = await getMainMenus();
     const keyboard = [];
 
-    if (dynamicMenus && dynamicMenus.length > 0) {
-      for (let i = 0; i < dynamicMenus.length; i += 2) {
-        const row = [dynamicMenus[i].title];
-        if (i + 1 < dynamicMenus.length) {
-          row.push(dynamicMenus[i + 1].title);
+    // Deduplicate titles
+    const titlesSet = new Set();
+    const uniqueTitles = [];
+
+    if (Array.isArray(rawDynamicMenus)) {
+      for (const item of rawDynamicMenus) {
+        const title = (item.title || '').trim();
+        if (title && !titlesSet.has(title)) {
+          titlesSet.add(title);
+          uniqueTitles.push(title);
+        }
+      }
+    }
+
+    if (uniqueTitles.length > 0) {
+      for (let i = 0; i < uniqueTitles.length; i += 2) {
+        const row = [uniqueTitles[i]];
+        if (i + 1 < uniqueTitles.length) {
+          row.push(uniqueTitles[i + 1]);
         }
         keyboard.push(row);
       }

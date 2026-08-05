@@ -56,6 +56,17 @@ export const BotSettingsPage: React.FC = () => {
 
     let currentList: BotMenu[] = data ? [...data] : [];
 
+    // Deduplicate by clean title in UI list
+    const uniqueMap = new Map<string, BotMenu>();
+    for (const item of currentList) {
+      const cleanTitle = (item.title || '').trim();
+      if (cleanTitle && !uniqueMap.has(cleanTitle)) {
+        uniqueMap.set(cleanTitle, item);
+      }
+    }
+
+    let deduplicatedList = Array.from(uniqueMap.values());
+
     // Standard 4 default main chat buttons
     const defaults: BotMenu[] = [
       {
@@ -93,27 +104,13 @@ export const BotSettingsPage: React.FC = () => {
     ];
 
     for (const def of defaults) {
-      const exists = currentList.some(m => m.title === def.title);
+      const exists = deduplicatedList.some(m => (m.title || '').trim() === def.title.trim());
       if (!exists) {
-        let { data: inserted, error } = await supabase.from('bot_menus').insert([def]).select('*');
-        if (error && error.message.includes('bot_menus_action_type_check')) {
-          const fallbackRes = await supabase.from('bot_menus').insert([{
-            ...def,
-            action_type: 'TEXT',
-            content_value: def.action_type === 'AI_APPLICATION' ? 'AI_APPLICATION: AI Avtomatik Ariza Tizimi' : `AI_CRM: ${def.content_value}`
-          }]).select('*');
-          inserted = fallbackRes.data;
-        }
-
-        if (inserted && inserted.length > 0) {
-          currentList.push(inserted[0]);
-        } else {
-          currentList.push({ ...def, id: `def-${def.order_index}` });
-        }
+        deduplicatedList.push({ ...def, id: `def-${def.order_index}` });
       }
     }
 
-    setMenus(currentList);
+    setMenus(deduplicatedList);
   };
 
   const fetchQuestions = async () => {
@@ -122,6 +119,33 @@ export const BotSettingsPage: React.FC = () => {
       .select('*')
       .order('order_index', { ascending: true });
     if (data) setQuestions(data);
+  };
+
+  const handleCleanDuplicates = async () => {
+    setLoading(true);
+    const { data } = await supabase.from('bot_menus').select('*').order('created_at', { ascending: true });
+    if (data && data.length > 0) {
+      const seenTitles = new Set<string>();
+      const idsToDelete: string[] = [];
+      for (const item of data) {
+        const cleanTitle = (item.title || '').trim();
+        if (seenTitles.has(cleanTitle)) {
+          idsToDelete.push(item.id!);
+        } else {
+          seenTitles.add(cleanTitle);
+        }
+      }
+      if (idsToDelete.length > 0) {
+        for (const id of idsToDelete) {
+          await supabase.from('bot_menus').delete().eq('id', id);
+        }
+        setMessage(`✅ ${idsToDelete.length} ta takrorlangan dublikat tugma bazadan tozalandi!`);
+      } else {
+        setMessage("ℹ️ Bazada takrorlangan tugmalar topilmadi.");
+      }
+    }
+    setLoading(false);
+    await fetchMenus();
   };
 
   const handleAddMenu = async (e: React.FormEvent) => {
@@ -237,20 +261,52 @@ export const BotSettingsPage: React.FC = () => {
     }
   };
 
-
   const handleToggleMenuStatus = async (menu: BotMenu) => {
-    if (!menu.id) return;
-    await supabase
-      .from('bot_menus')
-      .update({ is_active: !menu.is_active })
-      .eq('id', menu.id);
-    fetchMenus();
+    setLoading(true);
+    if (menu.id && !menu.id.startsWith('def-')) {
+      const { error } = await supabase
+        .from('bot_menus')
+        .update({ is_active: !menu.is_active })
+        .eq('id', menu.id);
+      if (error) setMessage(`❌ Xatolik: ${error.message}`);
+      else setMessage(`✅ Tugma statusi o'zgardi!`);
+    } else {
+      let { error } = await supabase.from('bot_menus').insert([{
+        title: menu.title,
+        action_type: menu.action_type,
+        content_value: menu.content_value,
+        location: menu.location || 'MAIN_CHAT',
+        order_index: menu.order_index || 1,
+        is_active: !menu.is_active
+      }]);
+      if (error && error.message.includes('bot_menus_action_type_check')) {
+        await supabase.from('bot_menus').insert([{
+          title: menu.title,
+          action_type: 'TEXT',
+          content_value: `${menu.action_type}: ${menu.content_value}`,
+          location: menu.location || 'MAIN_CHAT',
+          order_index: menu.order_index || 1,
+          is_active: !menu.is_active
+        }]);
+      }
+      setMessage(`✅ Tugma statusi o'zgardi!`);
+    }
+    setLoading(false);
+    await fetchMenus();
   };
 
-  const handleDeleteMenu = async (id: string) => {
-    if (!window.confirm("Ushbu tugmani o'chirishni tasdiqlaysizmi?")) return;
-    await supabase.from('bot_menus').delete().eq('id', id);
-    fetchMenus();
+  const handleDeleteMenu = async (menu: BotMenu) => {
+    if (!window.confirm(`"${menu.title}" tugmasini o'chirishni tasdiqlaysizmi?`)) return;
+    setLoading(true);
+    if (menu.id && !menu.id.startsWith('def-')) {
+      const { error } = await supabase.from('bot_menus').delete().eq('id', menu.id);
+      if (error) setMessage(`❌ O'chirishda xatolik: ${error.message}`);
+      else setMessage("✅ Tugma o'chirildi!");
+    } else {
+      setMessage("✅ Tugma o'chirildi!");
+    }
+    setLoading(false);
+    await fetchMenus();
   };
 
   const handleAddQuestion = async (e: React.FormEvent) => {
@@ -435,13 +491,17 @@ export const BotSettingsPage: React.FC = () => {
 
               {/* Menus List & Edit Management */}
               <div className="bg-slate-800/40 rounded-xl p-4 border border-slate-800 space-y-3">
-                <div className="flex justify-between items-center border-b border-slate-800 pb-2">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-800 pb-2 gap-2">
                   <h3 className="font-semibold text-xs text-slate-300">
                     Mavjud Chat Tugmalari Ro'yxati va Sozlamalari ({menus.length} ta)
                   </h3>
-                  <span className="text-[10px] text-slate-400">
-                    Barcha tugmalar Admin panel orqali to'g'ridan-to'g'ri boshqariladi
-                  </span>
+                  <button
+                    onClick={handleCleanDuplicates}
+                    disabled={loading}
+                    className="px-3 py-1 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 rounded text-xs font-bold border border-amber-500/40 transition flex items-center gap-1"
+                  >
+                    🧹 Dublikatlarni Tozalash
+                  </button>
                 </div>
 
                 {menus.length === 0 ? (
@@ -450,7 +510,7 @@ export const BotSettingsPage: React.FC = () => {
                   <div className="space-y-2">
                     {menus.map((menu) => (
                       <div 
-                        key={menu.id} 
+                        key={menu.id || menu.title} 
                         className={`flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 rounded-xl border gap-3 transition ${
                           menu.is_active 
                             ? "bg-slate-900 border-slate-800" 
@@ -474,7 +534,7 @@ export const BotSettingsPage: React.FC = () => {
                             <span className={`text-[10px] px-2 py-0.5 rounded font-semibold ${
                               menu.is_active ? "bg-emerald-900/60 text-emerald-300" : "bg-red-950 text-red-400"
                             }`}>
-                              {menu.is_active ? "Faol" : "O'chirilgan"}
+                              {menu.is_active ? "Faol" : "Nofaol"}
                             </span>
                           </div>
                           <p className="text-xs text-slate-400 line-clamp-2 font-mono bg-slate-950/50 p-2 rounded border border-slate-800/80">
@@ -482,7 +542,7 @@ export const BotSettingsPage: React.FC = () => {
                           </p>
                         </div>
 
-                        {/* Action buttons: Edit, Toggle Status, Delete */}
+                        {/* Action buttons: Edit, Toggle Status (Nofaol qilish), Delete */}
                         <div className="flex items-center gap-2 self-end sm:self-center">
                           <button
                             onClick={() => setEditingMenu(menu)}
@@ -498,10 +558,10 @@ export const BotSettingsPage: React.FC = () => {
                                 : "bg-emerald-950 text-emerald-400 border-emerald-500/40 hover:bg-emerald-900"
                             }`}
                           >
-                            {menu.is_active ? "🔕 O'chirish" : "🔔 Yoqish"}
+                            {menu.is_active ? "🔕 Nofaol qilish" : "🔔 Faollashtirish"}
                           </button>
                           <button
-                            onClick={() => menu.id && handleDeleteMenu(menu.id)}
+                            onClick={() => handleDeleteMenu(menu)}
                             className="px-3 py-1 bg-red-950/80 hover:bg-red-900 text-red-300 border border-red-800/60 rounded text-xs font-semibold transition"
                           >
                             🗑️ O'chirish

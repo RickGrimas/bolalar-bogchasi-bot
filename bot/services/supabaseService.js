@@ -90,7 +90,16 @@ export async function getMainMenus() {
     return inserted || defaults;
   }
 
-  return data;
+  // Deduplicate by clean title to prevent duplicate buttons in Telegram keyboard
+  const uniqueMap = new Map();
+  for (const item of data) {
+    const cleanTitle = (item.title || '').trim();
+    if (cleanTitle && !uniqueMap.has(cleanTitle)) {
+      uniqueMap.set(cleanTitle, item);
+    }
+  }
+
+  return Array.from(uniqueMap.values());
 }
 
 
